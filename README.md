@@ -1,29 +1,18 @@
 # tpp-database-history
 
-This is a template for an OpenSAFELY Core repository.
+This repo queries, transforms, and displays the number of events per day in the OpenSAFELY-TPP database.
+It is part of the OpenSAFELY platform's technical documentation
+and is published on <https://reports.opensafely.org/>.
 
-Put your project description here.
+## About the OpenSAFELY platform
 
-New repo checklist:
-- [ ] Does the repo require a Dockerfile?
-  If not, delete:
-  - Dockerfile -
-  - .dockerignore
-  - hadolint pre-commit hook from `.pre-commit-config.yaml`
-  - `lint-dockerfile` action from `.github/workflows/main.yml`
-- [ ] Is this a Django project?
-  If so, you probably need to add the following per-file ignores to `.flake8`
-  ```
-  per-file-ignores =
-    manage.py:INP001
-    gunicorn.conf.py:INP001
-  ```
-- [ ] Will this project be installed with pip?
-  If so, delete `requirements.prod.in` and switch references in the `justfile` to `pyproject.toml`
-- [ ] Update DEVELOPERS.md with any project-specific requirements and commands
-- [ ] Update commands in `justfile`
+The OpenSAFELY platform is a secure analytics framework for electronic health records research in the NHS.
 
+Instead of requesting access for slices of patient data and transporting them elsewhere for analysis,
+the platform supports developing analytics against dummy data
+and then running against the real data *within the same infrastructure that the real data is stored*.
+Read more at [OpenSAFELY.org](https://opensafely.org).
 
-## Developer docs
+## Notes for developers
 
-Please see the [additional information](DEVELOPERS.md).
+Please see [_DEVELOPERS.md_](DEVELOPERS.md).

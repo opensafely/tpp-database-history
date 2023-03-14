@@ -3,37 +3,46 @@ default_language_version:
 
 repos:
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 23.1.0
     hooks:
-    - id: black
+      - id: black-jupyter
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 6.0.0
     hooks:
-    - id: flake8
-      additional_dependencies:
-      - "flake8-builtins"
-      - "flake8-implicit-str-concat"
-      - "flake8-no-pep420"
+      - id: flake8
+        additional_dependencies:
+          - "flake8-builtins"
+          - "flake8-implicit-str-concat"
+          - "flake8-no-pep420"
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
-    - id: isort
+      - id: isort
+
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.0.0
+    # This hook filters sql files, so if there aren't sql files in the staging
+    # area, then `pre-commit run` will skip it. Indeed, `pre-commit run
+    # --all-files` will skip it too, as the `--all-files` argument doesn't work
+    # as documented.
+    hooks:
+      - id: sqlfluff-fix
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
-    - id: trailing-whitespace
-    - id: end-of-file-fixer
-    - id: debug-statements
-    - id: check-ast
-    - id: check-json
-    - id: check-toml
-    - id: check-yaml
-    - id: detect-private-key
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: check-ast
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: detect-private-key
 
-  - repo: https://github.com/stratasan/hadolint-pre-commit
-    rev: cdefcb0
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
     hooks:
-    - id: hadolint
+      - id: nbstripout
