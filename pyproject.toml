@@ -29,3 +29,7 @@ lines_after_imports = 2
 skip_glob = [".direnv", "venv", ".venv"]
 
 [tool.pytest.ini_options]
+
+[tool.sqlfluff.core]
+dialect = "tsql"
+exclude_rules = "CP02"
