@@ -1,0 +1,15 @@
+version: "3.0"
+
+expectations:
+  population_size: 1000
+
+actions:
+  query:
+    run: >
+      sqlrunner:latest
+        --dummy-data-file analysis/dummy_rows.csv.gz
+        --output output/rows.csv.gz
+        analysis/query.sql
+    outputs:
+      highly_sensitive:
+        rows: output/rows.csv.gz
