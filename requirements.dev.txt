@@ -424,9 +424,9 @@ regex==2022.10.31 \
     --hash=sha256:e613a98ead2005c4ce037c7b061f2409a1a4e45099edb0ef3200ee26ed2a69a8 \
     --hash=sha256:ef4163770525257876f10e8ece1cf25b71468316f61451ded1a6f44273eedeb5
     # via sqlfluff
-sqlfluff==2.0.0 \
-    --hash=sha256:8dad3cde858fb752d64f7c834d88bd3cc8b656bfcd24e9a6ebb576bb31f584ef \
-    --hash=sha256:caeab9886e661151e4cf828e9629fa7228129e6bb544cbbd8087b2b88c42d70c
+sqlfluff==2.0.1 \
+    --hash=sha256:7ffcc9b753d6bab8bc70df6a4cbd66a52fdb5e4e4a272ba92187f781caffc565 \
+    --hash=sha256:e869af256f1973bea86b70b1018c47a21e7430e2b8f142558177c6c73763a2fc
     # via -r requirements.dev.in
 tblib==1.7.0 \
     --hash=sha256:059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c \
