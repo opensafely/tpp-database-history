@@ -13,3 +13,10 @@ actions:
     outputs:
       highly_sensitive:
         rows: output/query/rows.csv.gz
+
+  aggregate:
+    needs: [query]
+    run: python:latest python -m analysis.aggregate
+    outputs:
+      moderately_sensitive:
+        aggregates: output/aggregate/*_by_*.csv.gz
