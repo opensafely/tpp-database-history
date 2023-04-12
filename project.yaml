@@ -20,3 +20,10 @@ actions:
     outputs:
       moderately_sensitive:
         aggregates: output/aggregate/*_by_*.csv.gz
+
+  plot:
+    needs: [aggregate]
+    run: python:latest python -m analysis.plot
+    outputs:
+      moderately_sensitive:
+        plots: output/plot/*.png
