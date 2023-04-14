@@ -13,22 +13,10 @@ exclude = '''
 )
 '''
 
-[tool.coverage.run]
-branch = true
-omit = [".venv/*"]
-
-[tool.coverage.report]
-fail_under = 100
-skip_covered = true
-
-[tool.coverage.html]
-
 [tool.isort]
 profile = "black"
 lines_after_imports = 2
 skip_glob = [".direnv", "venv", ".venv"]
-
-[tool.pytest.ini_options]
 
 [tool.sqlfluff.core]
 dialect = "tsql"
