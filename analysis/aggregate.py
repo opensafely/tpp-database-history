@@ -19,7 +19,8 @@ def read(f_in):
     date_col = "event_date"
     index_cols = ["table_name", date_col]
     value_col = "event_count"
-    return (
+    utils.log(f"Reading {f_in}")
+    event_counts = (
         pandas.read_csv(
             f_in,
             parse_dates=[date_col],
@@ -29,6 +30,12 @@ def read(f_in):
         .loc[:, value_col]
         .sort_index()
     )
+    utils.log(f"Read {f_in}")
+    utils.log(f"  Type: {type(event_counts).__name__}")
+    utils.log(f"  Name: {event_counts.name}")
+    utils.log(f"  Index type: {type(event_counts.index).__name__}")
+    utils.log(f"  Index level names: {', '.join(event_counts.index.names)}")
+    return event_counts
 
 
 def aggregate(event_counts, offset, func):
@@ -53,6 +60,11 @@ def resample(event_counts, offset, func):
     [2]: http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.core.resample.Resampler.aggregate.html#pandas.core.resample.Resampler.aggregate
     """
     group_by, resample_by = event_counts.index.names
+    utils.log("Resampling")
+    utils.log(f"  Grouping by: {group_by}")
+    utils.log(f"  Resampling by: {resample_by}")
+    utils.log(f"  Offset: {offset}")
+    utils.log(f"  Aggregation function: {func}")
     return (
         event_counts.groupby(level=group_by)
         .resample(level=resample_by, rule=offset)

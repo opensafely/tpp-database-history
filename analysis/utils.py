@@ -14,6 +14,10 @@ OUTPUT_DIR = WORKSPACE_DIR / "output"
 makedirs = functools.partial(os.makedirs, exist_ok=True)
 
 
+def log(s):
+    print(s)
+
+
 def slugify(s):
     # Based on Django's slugify. For more information, see:
     # https://github.com/django/django/blob/4.1.7/django/utils/text.py#L399-L417
