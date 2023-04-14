@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 23.3.0
     hooks:
       - id: black
 
@@ -22,7 +22,7 @@ repos:
       - id: isort
 
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 2.0.0
+    rev: 2.0.3
     # This hook filters sql files, so if there aren't sql files in the staging
     # area, then `pre-commit run` will skip it. Indeed, `pre-commit run
     # --all-files` will skip it too, as the `--all-files` argument doesn't work
