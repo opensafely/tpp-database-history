@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>OpenSAFELY-TPP Database Historical Coverage</title>
+</head>
+
+<body>
+    <h1>OpenSAFELY-TPP Database Historical Coverage</h1>
+    <p>
+        This report displays the historical coverage of the OpenSAFELY-TPP database.
+        It is part of the OpenSAFELY platform's technical documentation
+        and is published at <a href="https://reports.opensafely.org/">https://reports.opensafely.org/</a>.
+    </p>
+    <p>
+        If you would like to use the OpenSAFELY platform, then you should read
+        our <a href="https://docs.opensafely.org/">documentation</a>,
+        our <a href="https://www.opensafely.org/about/">principles</a>,
+        and our process for <a href="https://www.opensafely.org/onboarding-new-users/">onboarding new users</a>.
+        If you would like to see the code we used to create this report,
+        then you can <a href="https://github.com/opensafely/tpp-database-history">view it on GitHub</a>.
+    </p>
+    <h2>Data Sources</h2>
+    <p>
+        The <a href="https://reports.opensafely.org/reports/opensafely-tpp-database-schema/"><em>OpenSAFELY-TPP Database Schema</em></a>
+        report contains information about the data sources in the OpenSAFELY-TPP database.
+    </p>
+    <h2>Report Run Date</h2>
+    <p>
+        This report was run on {{ to_date|date_format }}.
+        It reflects the state of the database on this date.
+    </p>
+    <h2>Event Activity</h2>
+    <p>
+        In the figures below,
+        <em>event activity</em> (counts of events, such as in-patient hospital admissions)
+        is reported for data sources from {{ from_date|date_format }} to {{ to_date|date_format }}.
+    </p>
+    <p>
+        The database only includes patients who were registered at GP practices using TPP's SystmOne clinical information system
+        (which is used by roughly 40% of GP practices)
+        on or after {{ tpp_epoch_date|date_format }},
+        including those patients who have since deregistered or died.
+        The database therefore captures event activity for these patients only.
+    </p>
+    {% for plot in plots %}
+    <p><img src="{{ plot|b64encode }}" title="Image generated from {{ plot }}"></p>
+    {% endfor %}
+</body>
+
+</html>
