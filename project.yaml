@@ -27,3 +27,10 @@ actions:
     outputs:
       moderately_sensitive:
         plots: output/plot/*.png
+
+  render_report:
+    needs: [plot]
+    run: python:latest python -m analysis.render_report
+    outputs:
+      moderately_sensitive:
+        report: output/render_report/report.html
