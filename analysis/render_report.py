@@ -9,7 +9,7 @@ import mimetypes
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from analysis import utils
+from analysis import config, utils
 
 
 ENVIRONMENT = Environment(
@@ -24,8 +24,8 @@ def main():
     rendered_report = render_report(
         {
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "from_date": datetime.date(2016, 1, 1),  # analysis/query.sql
-            "to_date": datetime.date.today(),
+            "from_date": config.FROM_DATE,
+            "to_date": config.TO_DATE,
             "plots": sorted((utils.OUTPUT_DIR / "plot").glob("*.png")),
         }
     )
