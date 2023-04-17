@@ -1,12 +1,17 @@
 DECLARE @from_date DATE;
 SET @from_date = DATEFROMPARTS(2016, 1, 1);
 
+DECLARE @to_date DATE;
+SET @to_date = CONVERT(DATE, GETDATE());
+
 SELECT
     'CodedEvent' AS table_name,
     CONVERT(DATE, ConsultationDate) AS event_date,
     COUNT(*) AS event_count
 FROM CodedEvent
-WHERE CONVERT(DATE, ConsultationDate) >= @from_date
+WHERE
+    CONVERT(DATE, ConsultationDate) >= @from_date
+    AND CONVERT(DATE, ConsultationDate) <= @to_date
 GROUP BY CONVERT(DATE, ConsultationDate)
 
 UNION ALL
@@ -16,7 +21,9 @@ SELECT
     CONVERT(DATE, SeenDate) AS event_date,
     COUNT(*) AS event_count
 FROM Appointment
-WHERE CONVERT(DATE, SeenDate) >= @from_date
+WHERE
+    CONVERT(DATE, SeenDate) >= @from_date
+    AND CONVERT(DATE, SeenDate) <= @to_date
 GROUP BY CONVERT(DATE, SeenDate)
 
 UNION ALL
@@ -26,7 +33,9 @@ SELECT
     Admission_Date AS event_date,
     COUNT(*) AS event_count
 FROM APCS
-WHERE Admission_Date >= @from_date
+WHERE
+    Admission_Date >= @from_date
+    AND Admission_Date <= @to_date
 GROUP BY Admission_Date
 
 UNION ALL
@@ -36,7 +45,9 @@ SELECT
     DateOfDeath AS event_date,
     COUNT(*) AS event_count
 FROM CPNS
-WHERE DateOfDeath >= @from_date
+WHERE
+    DateOfDeath >= @from_date
+    AND DateOfDeath <= @to_date
 GROUP BY DateOfDeath
 
 UNION ALL
@@ -46,7 +57,9 @@ SELECT
     Arrival_Date AS event_date,
     COUNT(*) AS event_count
 FROM EC
-WHERE Arrival_Date >= @from_date
+WHERE
+    Arrival_Date >= @from_date
+    AND Arrival_Date <= @to_date
 GROUP BY Arrival_Date
 
 UNION ALL
@@ -56,7 +69,9 @@ SELECT
     Appointment_Date AS event_date,
     COUNT(*) AS event_count
 FROM OPA
-WHERE Appointment_Date >= @from_date
+WHERE
+    Appointment_Date >= @from_date
+    AND Appointment_Date <= @to_date
 GROUP BY Appointment_Date
 
 UNION ALL
@@ -66,7 +81,9 @@ SELECT
     CONVERT(DATE, IcuAdmissionDateTime) AS event_date,
     COUNT(*) AS event_count
 FROM ICNARC
-WHERE CONVERT(DATE, IcuAdmissionDateTime) >= @from_date
+WHERE
+    CONVERT(DATE, IcuAdmissionDateTime) >= @from_date
+    AND CONVERT(DATE, IcuAdmissionDateTime) <= @to_date
 GROUP BY CONVERT(DATE, IcuAdmissionDateTime)
 
 UNION ALL
@@ -76,7 +93,9 @@ SELECT
     dod AS event_date,
     COUNT(*) AS event_count
 FROM ONS_Deaths
-WHERE dod >= @from_date
+WHERE
+    dod >= @from_date
+    AND dod <= @to_date
 GROUP BY dod
 
 UNION ALL
@@ -86,7 +105,9 @@ SELECT
     Earliest_Specimen_Date AS event_date,
     COUNT(*) AS event_count
 FROM SGSS_Positive
-WHERE Earliest_Specimen_Date >= @from_date
+WHERE
+    Earliest_Specimen_Date >= @from_date
+    AND Earliest_Specimen_Date <= @to_date
 GROUP BY Earliest_Specimen_Date
 
 UNION ALL
@@ -96,7 +117,9 @@ SELECT
     Earliest_Specimen_Date AS event_date,
     COUNT(*) AS event_count
 FROM SGSS_Negative
-WHERE Earliest_Specimen_Date >= @from_date
+WHERE
+    Earliest_Specimen_Date >= @from_date
+    AND Earliest_Specimen_Date <= @to_date
 GROUP BY Earliest_Specimen_Date
 
 UNION ALL
@@ -106,7 +129,9 @@ SELECT
     Specimen_Date AS event_date,
     COUNT(*) AS event_count
 FROM SGSS_AllTests_Positive
-WHERE Specimen_Date >= @from_date
+WHERE
+    Specimen_Date >= @from_date
+    AND Specimen_Date <= @to_date
 GROUP BY Specimen_Date
 
 UNION ALL
@@ -116,7 +141,9 @@ SELECT
     Specimen_Date AS event_date,
     COUNT(*) AS event_count
 FROM SGSS_AllTests_Negative
-WHERE Specimen_Date >= @from_date
+WHERE
+    Specimen_Date >= @from_date
+    AND Specimen_Date <= @to_date
 GROUP BY Specimen_Date
 
 ORDER BY table_name, event_date, event_count
