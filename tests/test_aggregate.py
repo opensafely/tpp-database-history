@@ -1,6 +1,15 @@
 import pandas
+import pytest
 
 from analysis import aggregate
+
+
+def test_read_with_unparsable_date(tmp_path):
+    rows_csv = tmp_path / "rows.csv"
+    unparsable_date = "9999-01-01"
+    rows_csv.write_text(f"table_name,event_date,event_count\nAPCS,{unparsable_date},1")
+    with pytest.raises(AssertionError):
+        aggregate.read(rows_csv)
 
 
 def make_series(event_dates):

@@ -19,7 +19,7 @@ def read(f_in):
     date_col = "event_date"
     index_cols = ["table_name", date_col]
     value_col = "event_count"
-    return (
+    event_counts = (
         pandas.read_csv(
             f_in,
             parse_dates=[date_col],
@@ -29,6 +29,18 @@ def read(f_in):
         .loc[:, value_col]
         .sort_index()
     )
+
+    # If a column given by parse_dates cannot be represented as an array of datetimes,
+    # then the column is returned as a string; no error is raised. We often encounter
+    # such columns, but we would like to know sooner rather than later, and with a more
+    # helpful error message. The duck-typing way of testing that an index is an array of
+    # datetimes is to call .is_all_dates. However, this property was removed in v2.0.0
+    # so, for the benefit of our future self, we'll call isinstance instead.
+    assert isinstance(
+        event_counts.index.get_level_values(date_col), pandas.DatetimeIndex
+    ), f"The {date_col} column cannot be parsed into a DatetimeIndex"
+
+    return event_counts
 
 
 def aggregate(event_counts, offset, func):
