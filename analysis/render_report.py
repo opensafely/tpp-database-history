@@ -23,6 +23,12 @@ def main():
     utils.makedirs(f_out.parent)
     rendered_report = render_report(
         {
+            # FIXME: I don't know what's special about 2009-01-01 (the name
+            # `tpp_epoch_date` is my best guess), so I asked on Slack. For more
+            # information, see:
+            # https://bennettoxford.slack.com/archives/C03FB777L1M/p1681721217659849
+            # It's passed as a template variable so that we can format it consistently
+            # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
             "from_date": config.FROM_DATE,
             "to_date": config.TO_DATE,
