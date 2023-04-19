@@ -3,18 +3,26 @@
 import itertools
 import textwrap
 
+import click
 import pandas
 from matplotlib import pyplot
 
-from analysis import utils
+from analysis import click_types, utils
 
 
-def main():
+@click.command()
+@click.option("--from-date", type=click_types.Date(), required=True)
+@click.option(
+    "--output",
+    "d_out",
+    type=click_types.Path(file_okay=False, resolve_path=True),
+    required=True,
+)
+def main(from_date, d_out):
     d_in = utils.OUTPUT_DIR / "aggregate"
-    by_day = read(d_in / "sum_by_day.csv.gz")
-    by_week = read(d_in / "mean_by_week.csv.gz")
+    by_day = read(d_in / "sum_by_day.csv.gz", from_date)
+    by_week = read(d_in / "mean_by_week.csv.gz", from_date)
 
-    d_out = utils.OUTPUT_DIR / "plot"
     utils.makedirs(d_out)
 
     figs_cols = plot(by_day, by_week)
@@ -23,9 +31,13 @@ def main():
         fig.savefig(d_out / f"{f_stem}.png")
 
 
-def read(f_in):
+def read(f_in, from_date):
     date_col = "event_date"
-    return pandas.read_csv(f_in, parse_dates=[date_col], index_col=[date_col])
+    return pandas.read_csv(
+        f_in,
+        parse_dates=[date_col],
+        index_col=[date_col],
+    ).loc[from_date:]
 
 
 def plot(by_day, by_week):

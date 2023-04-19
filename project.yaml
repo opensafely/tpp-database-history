@@ -23,7 +23,10 @@ actions:
 
   plot:
     needs: [aggregate]
-    run: python:latest python -m analysis.plot
+    run: >
+      python:latest python -m analysis.plot
+        --from-date 2016-01-01
+        --output output/plot
     outputs:
       moderately_sensitive:
         plots: output/plot/*.png
