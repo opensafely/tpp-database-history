@@ -18,3 +18,9 @@ def test_round_to_nearest_five(data_in, data_out):
     rounded_series = sdc.round_to_nearest_five(series)
     assert series is not rounded_series
     assert list(rounded_series) == [data_out]
+
+
+def test_round_to_nearest_five_with_float_nan():
+    with pytest.raises(ValueError) as e:
+        sdc.round_to_nearest_five(pandas.Series([1, None]))
+    assert str(e.value) == "cannot convert float NaN to integer"
