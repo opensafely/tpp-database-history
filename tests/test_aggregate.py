@@ -29,7 +29,7 @@ def make_series(event_dates):
     return pandas.Series(index=index, data=1, name="event_count")
 
 
-@pytest.mark.parametrize("func,exp", [("sum", [1, 0, 1]), ("mean", [1, None, 1])])
+@pytest.mark.parametrize("func,exp", [("sum", [1, 0, 1]), ("mean", [1, 0, 1])])
 def test_resample(func, exp):
     series = make_series(["2023-01-01", "2023-01-03"])
     by_day = aggregate.resample(series, "D", func).reset_index()
