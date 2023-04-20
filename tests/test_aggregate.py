@@ -20,12 +20,13 @@ def make_series(event_dates):
     return pandas.Series(index=index, data=1, name="event_count")
 
 
-def test_resample():
+@pytest.mark.parametrize("func,exp", [("sum", [1, 0, 1])])
+def test_resample(func, exp):
     series = make_series(["2023-01-01", "2023-01-03"])
-    by_day = aggregate.resample(series, "D", "sum").reset_index()
+    by_day = aggregate.resample(series, "D", func).reset_index()
     assert [x.isoformat() for x in by_day["event_date"].dt.date] == [
         "2023-01-01",
         "2023-01-02",
         "2023-01-03",
     ] * 2
-    assert list(by_day["event_count"]) == [1, 0, 1] * 2
+    assert list(by_day["event_count"]) == exp * 2
