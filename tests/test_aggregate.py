@@ -33,9 +33,10 @@ def make_series(event_dates):
 def test_resample(func, exp):
     series = make_series(["2023-01-01", "2023-01-03"])
     by_day = aggregate.resample(series, "D", func).reset_index()
-    assert [x.isoformat() for x in by_day["event_date"].dt.date] == [
-        "2023-01-01",
-        "2023-01-02",
-        "2023-01-03",
-    ] * 2
+    assert_series_equal(
+        by_day["event_date"],
+        pandas.Series(
+            pandas.to_datetime(["2023-01-01", "2023-01-02", "2023-01-03"] * 2)
+        ),
+    )
     assert_series_equal(by_day["event_count"], pandas.Series(exp * 2))
