@@ -17,6 +17,7 @@ redact_le_five = functools.partial(redact_le, threshold=5)
 
 def round_to_nearest(series, multiple):
     def rounder(value):
+        # raises ValueError when value = float("NaN")
         return int(multiple * round(value / multiple, 0))
 
     return series.apply(rounder)

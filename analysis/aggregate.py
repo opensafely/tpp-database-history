@@ -69,6 +69,11 @@ def resample(event_counts, offset, func):
         event_counts.groupby(level=group_by)
         .resample(level=resample_by, rule=offset)
         .aggregate(func)
+        # Different aggregation functions behave differently when they are passed empty
+        # groups. For example, "sum" (`numpy.sum`) returns zeros; "mean" (`numpy.mean`)
+        # returns the missing value marker. We're resampling an irregular time series,
+        # so it's reasonable to replace the missing value marker with zeros.
+        .fillna(0)
         .sort_index()
     )
 
