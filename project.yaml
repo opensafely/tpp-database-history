@@ -21,18 +21,28 @@ actions:
       moderately_sensitive:
         aggregates: output/aggregate/*_by_*.csv.gz
 
-  plot:
+  plot_from_2016:
     needs: [aggregate]
     run: >
       python:latest python -m analysis.plot
         --from-date 2016-01-01
-        --output output/plot
+        --output output/plot_from_2016
     outputs:
       moderately_sensitive:
-        plots: output/plot/*.png
+        plots: output/plot_from_2016/*.png
+
+  plot_from_2020:
+    needs: [aggregate]
+    run: >
+      python:latest python -m analysis.plot
+        --from-date 2020-02-01
+        --output output/plot_from_2020
+    outputs:
+      moderately_sensitive:
+        plots: output/plot_from_2020/*.png
 
   render_report:
-    needs: [plot]
+    needs: [plot_from_2016, plot_from_2020]
     run: python:latest python -m analysis.render_report
     outputs:
       moderately_sensitive:

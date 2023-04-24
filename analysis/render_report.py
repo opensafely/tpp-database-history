@@ -4,6 +4,7 @@ For more information about Jinja, see:
 <https://jinja.palletsprojects.com/en/2.11.x/>
 """
 import base64
+import collections
 import datetime
 import mimetypes
 
@@ -30,9 +31,11 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "from_date": config.FROM_DATE,
             "to_date": config.TO_DATE,
-            "plots": sorted((utils.OUTPUT_DIR / "plot").glob("*.png")),
+            "plots": group_plots(
+                utils.OUTPUT_DIR / "plot_from_2020",
+                utils.OUTPUT_DIR / "plot_from_2016",
+            ),
         }
     )
     f_out.write_text(rendered_report, encoding="utf-8")
@@ -63,6 +66,26 @@ ENVIRONMENT.filters["date_format"] = date_format
 def render_report(data):
     template = ENVIRONMENT.get_template("report_template.html")
     return template.render(data)
+
+
+def group_plots(*paths, suffix=".png"):
+    """Groups similarly named plots.
+
+    Groups plots, files with the given suffix that share the same name, into a dict with
+    stem and paths keys. Returns an list of such dicts for all plots at the given paths.
+    """
+    mapping = collections.defaultdict(list)
+
+    def mapper(parent):
+        for child in parent.glob(f"*{suffix}"):
+            mapping[child.stem].append(child)
+
+    for path in paths:
+        assert path.is_dir()
+        mapper(path)
+
+    mapping = dict(sorted(mapping.items()))
+    return [{"stem": k, "paths": v} for k, v in mapping.items()]
 
 
 if __name__ == "__main__":

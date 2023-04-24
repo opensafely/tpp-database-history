@@ -35,7 +35,7 @@
     <p>
         In the figures below,
         <em>event activity</em> (counts of events, such as in-patient hospital admissions)
-        is reported for data sources from {{ from_date|date_format }} to {{ to_date|date_format }}.
+        is reported for data sources from the given date to {{ to_date|date_format }}.
     </p>
     <p>
         The database only includes patients who were registered at GP practices using TPP's SystmOne clinical information system
@@ -52,7 +52,9 @@
     </ul>
     {% for plot in plots %}
     <h3 id="{{ plot.stem }}">{{ plot.stem }}</h3>
-    <p><img src="{{ plot|b64encode }}" title="Image generated from {{ plot }}"></p>
+    {% for path in plot.paths %}
+    <p><img src="{{ path|b64encode }}" title="Image generated from {{ path }}"></p>
+    {% endfor %}
     {% endfor %}
 </body>
 

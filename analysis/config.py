@@ -1,7 +1,6 @@
 import datetime
 
 
-# If you change the values of these variables, then also change their equivalents in
+# If you change the value of this variable, then also change its equivalent in
 # analysis/query.sql.
-FROM_DATE = datetime.date(2016, 1, 1)
 TO_DATE = datetime.date.today()
