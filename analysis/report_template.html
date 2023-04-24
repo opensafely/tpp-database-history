@@ -44,7 +44,14 @@
         including those patients who have since deregistered or died.
         The database therefore captures event activity for these patients only.
     </p>
+    <p>Data sources:</p>
+    <ul>
+        {% for plot in plots %}
+        <li><a href="#{{ plot.stem }}">{{ plot.stem }}</a></li>
+        {% endfor %}
+    </ul>
     {% for plot in plots %}
+    <h3 id="{{ plot.stem }}">{{ plot.stem }}</h3>
     <p><img src="{{ plot|b64encode }}" title="Image generated from {{ plot }}"></p>
     {% endfor %}
 </body>
