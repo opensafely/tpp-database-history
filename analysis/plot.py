@@ -47,13 +47,14 @@ def plot(by_day, by_week):
             ),
         )
 
-        ax.plot(by_day.index, by_day[col])
-        ax.plot(by_week.index, by_week[col])
+        ax.plot(by_day.index, by_day[col], linewidth=1, label="Day")
+        ax.plot(by_week.index, by_week[col], linewidth=2, label="Week (mean)")
 
         ax.grid(True)
-        ax.set_title(f"From {min_ts:%x} to {max_ts:%x}", fontsize="medium")
+        ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="medium")
         ax.set_ylabel("Event Counts")
         ax.set_ylim(0)
+        ax.legend(loc="upper right")
 
         yield fig, col
 
