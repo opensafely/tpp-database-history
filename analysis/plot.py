@@ -51,7 +51,7 @@ def plot(by_day, by_week):
         ax.plot(by_week.index, by_week[col])
 
         ax.grid(True)
-        ax.set_title(f"From {min_ts:%x} to {max_ts:%x}", fontsize="medium")
+        ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="medium")
         ax.set_ylabel("Event Counts")
         ax.set_ylim(0)
 
