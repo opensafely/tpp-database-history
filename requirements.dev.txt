@@ -348,9 +348,9 @@ regex==2023.3.23 \
     --hash=sha256:fdf7ad455f1916b8ea5cdbc482d379f6daf93f3867b4232d14699867a5a13af7 \
     --hash=sha256:fffe57312a358be6ec6baeb43d253c36e5790e436b7bf5b7a38df360363e88e9
     # via sqlfluff
-sqlfluff==2.0.5 \
-    --hash=sha256:25467431cd1f86d61f7a1ac22c886742812e62faf436ef0a9e5de05996b3c292 \
-    --hash=sha256:3a95fb1a85b1920f15fc554e50fa383339275d333b611853a957974850fe6c1a
+sqlfluff==2.0.7 \
+    --hash=sha256:0847bd888329ae45375724bed2ac8a4ab9d2ddc48331e98ec2de679d276de254 \
+    --hash=sha256:c5349f1a8dc70a79a766a6cb0f84d3b73382c43b0abe76e33873d6eaffef1f84
     # via -r requirements.dev.in
 tblib==1.7.0 \
     --hash=sha256:059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c \
