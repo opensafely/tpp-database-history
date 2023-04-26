@@ -13,33 +13,31 @@ rng = random.default_rng(seed=1)
 
 
 def main():
-    table_names = [
-        "APCS",
-        "Appointment",
-        "CodedEvent",
-        "CPNS",
-        "EC",
-        "ICNARC",
-        "ONS_Deaths",
-        "OPA",
-        "SGSS_AllTests_Negative",
-        "SGSS_AllTests_Positive",
-        "SGSS_Negative",
-        "SGSS_Positive",
+    tables = [
+        ("APCS", "2016-01-01", "2022-12-31"),
+        ("Appointment", "2016-01-01", "2022-12-31"),
+        ("CodedEvent", "2016-01-01", "2022-12-31"),
+        ("CPNS", "2016-01-01", "2022-12-31"),
+        ("EC", "2016-01-01", "2022-12-31"),
+        ("ICNARC", "2016-01-01", "2022-12-31"),
+        ("ONS_Deaths", "2016-01-01", "2022-12-31"),
+        ("OPA", "2016-01-01", "2022-12-31"),
+        ("SGSS_AllTests_Negative", "2016-01-01", "2022-12-31"),
+        ("SGSS_AllTests_Positive", "2016-01-01", "2022-12-31"),
+        ("SGSS_Negative", "2016-01-01", "2022-12-31"),
+        ("SGSS_Positive", "2016-01-01", "2022-12-31"),
     ]
-    from_date = "2016-01-01"
-    to_date = "2022-12-31"
     f_out = utils.OUTPUT_DIR / "generate_dummy_rows" / "dummy_rows.csv.gz"
 
     utils.makedirs(f_out.parent)
-    data_frame = make_dummy_rows(table_names, from_date, to_date)
+    data_frame = make_dummy_rows(tables)
     data_frame.to_csv(f_out, index=False)
 
 
-def make_dummy_rows(table_names, from_date, to_date):
-    event_date = pandas.date_range(from_date, to_date)
-
-    def maker(table_name):
+def make_dummy_rows(tables):
+    def maker(table):
+        table_name, from_date, to_date = table
+        event_date = pandas.date_range(from_date, to_date)
         return pandas.DataFrame(
             {
                 "table_name": pandas.Series([table_name] * len(event_date)),
@@ -48,7 +46,7 @@ def make_dummy_rows(table_names, from_date, to_date):
             }
         )
 
-    return pandas.concat(maker(t) for t in table_names)
+    return pandas.concat(maker(t) for t in tables)
 
 
 def random_walk(size, max_step=10, start=100):
