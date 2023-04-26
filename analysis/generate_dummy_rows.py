@@ -44,11 +44,19 @@ def make_dummy_rows(table_names, from_date, to_date):
             {
                 "table_name": pandas.Series([table_name] * len(event_date)),
                 "event_date": event_date,
-                "event_count": rng.integers(0, 1_000, len(event_date)),
+                "event_count": random_walk(len(event_date)),
             }
         )
 
     return pandas.concat(maker(t) for t in table_names)
+
+
+def random_walk(size, max_step=10, start=100):
+    for i in range(size):
+        step = rng.integers(-max_step, max_step + 1)  # closed interval
+        next_ = max(start + step, 0)
+        yield next_
+        start = next_
 
 
 if __name__ == "__main__":
