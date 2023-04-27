@@ -1,11 +1,11 @@
 """Plot aggregated event counts.
 """
-import itertools
 import textwrap
 
 import click
 import pandas
 from matplotlib import pyplot
+from matplotlib.dates import num2date
 
 from analysis import click_types, utils
 
@@ -42,8 +42,6 @@ def read(f_in, from_date):
 
 def plot(by_day, by_week):
     cols = by_day.columns.union(by_week.columns)
-    min_ts = min(itertools.chain(by_day.index, by_week.index))
-    max_ts = max(itertools.chain(by_day.index, by_week.index))
     for col in cols:
         fig, ax = pyplot.subplots(figsize=(15, 7))
 
@@ -63,6 +61,8 @@ def plot(by_day, by_week):
         ax.plot(by_week.index, by_week[col], linewidth=2, label="Week (mean)")
 
         ax.grid(True)
+        ax.margins(x=0)
+        min_ts, max_ts = [num2date(x) for x in ax.get_xlim()]
         ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="medium")
         ax.set_ylabel("Event Counts")
         ax.set_ylim(0)
