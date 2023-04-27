@@ -67,7 +67,7 @@ def resample(event_counts, offset, func):
     group_by, resample_by = event_counts.index.names
     return (
         event_counts.groupby(level=group_by)
-        .resample(level=resample_by, rule=offset)
+        .resample(level=resample_by, rule=offset, label="left")
         .aggregate(func)
         # Different aggregation functions behave differently when they are passed empty
         # groups. For example, "sum" (`numpy.sum`) returns zeros; "mean" (`numpy.mean`)
