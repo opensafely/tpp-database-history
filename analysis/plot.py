@@ -20,8 +20,8 @@ from analysis import click_types, utils
 )
 def main(from_date, d_out):
     d_in = utils.OUTPUT_DIR / "aggregate"
-    by_day = read(d_in / "sum_by_day.csv.gz", from_date)
-    by_week = read(d_in / "mean_by_week.csv.gz", from_date)
+    by_day = read(d_in / "sum_by_day.csv.gz").pipe(filter_out, from_date)
+    by_week = read(d_in / "mean_by_week.csv.gz").pipe(filter_out, from_date)
 
     utils.makedirs(d_out)
 
@@ -31,13 +31,13 @@ def main(from_date, d_out):
         fig.savefig(d_out / f"{f_stem}.png")
 
 
-def read(f_in, from_date):
+def read(f_in):
     date_col = "event_date"
-    return pandas.read_csv(
-        f_in,
-        parse_dates=[date_col],
-        index_col=[date_col],
-    ).loc[from_date:]
+    return pandas.read_csv(f_in, parse_dates=[date_col], index_col=[date_col])
+
+
+def filter_out(data_frame, before_date):
+    return data_frame.loc[before_date:]
 
 
 def plot(by_day, by_week):
