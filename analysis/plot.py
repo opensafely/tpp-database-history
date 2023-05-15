@@ -11,7 +11,7 @@ from analysis import click_types, utils
 
 
 @click.command()
-@click.option("--from-date", type=click_types.Date(), required=True)
+@click.option("--from-date", type=click_types.Timestamp(), required=True)
 @click.option(
     "--output",
     "d_out",
