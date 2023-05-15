@@ -37,7 +37,9 @@ def read(f_in):
 
 
 def filter_out(data_frame, before_date):
-    return data_frame.loc[before_date:]
+    copy = data_frame[:]
+    copy[copy.index < before_date] = None
+    return copy
 
 
 def plot(by_day, by_week):
