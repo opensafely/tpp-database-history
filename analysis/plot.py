@@ -1,5 +1,6 @@
 """Plot aggregated event counts.
 """
+import collections
 import textwrap
 
 import click
@@ -20,8 +21,14 @@ from analysis import click_types, utils
 )
 def main(from_date, d_out):
     d_in = utils.OUTPUT_DIR / "aggregate"
-    by_day = read(d_in / "sum_by_day.csv.gz").pipe(filter_out, from_date)
-    by_week = read(d_in / "mean_by_week.csv.gz").pipe(filter_out, from_date)
+    by_day = read(d_in / "sum_by_day.csv.gz")
+    by_week = read(d_in / "mean_by_week.csv.gz")
+
+    by_day_date_ranges = get_date_ranges_from_date(by_day, from_date)
+    by_week_date_ranges = get_date_ranges_from_date(by_week, from_date)
+
+    by_day = filter_out(by_day, by_day_date_ranges)
+    by_week = filter_out(by_week, by_week_date_ranges)
 
     utils.makedirs(d_out)
 
@@ -36,10 +43,22 @@ def read(f_in):
     return pandas.read_csv(f_in, parse_dates=[date_col], index_col=[date_col])
 
 
-def filter_out(data_frame, before_date):
+def filter_out(data_frame, date_ranges):
     copy = data_frame[:]
-    copy[copy.index < before_date] = None
+    for table_name, from_date, to_date in date_ranges:
+        copy.loc[copy.index < from_date, table_name] = None
+        copy.loc[copy.index > to_date, table_name] = None
     return copy
+
+
+_DateRange = collections.namedtuple("DateRange", ("table_name", "from_date", "to_date"))
+
+
+def get_date_ranges_from_date(data_frame, from_date):
+    for table_name, series in data_frame.items():
+        from_ = from_date
+        to_ = series.dropna().index.max()
+        yield _DateRange(table_name, from_, to_)
 
 
 def plot(by_day, by_week):

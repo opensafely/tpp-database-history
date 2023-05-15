@@ -15,7 +15,31 @@ def by_day():
 
 
 def test_filter_out(by_day):
-    filtered_out = plot.filter_out(by_day, pandas.Timestamp.fromisoformat("2023-02-01"))
+    date_ranges = plot.get_date_ranges_from_date(
+        by_day,
+        pandas.Timestamp.fromisoformat("2023-02-01"),
+    )
+    filtered_out = plot.filter_out(by_day, date_ranges)
     assert by_day is not filtered_out
     assert filtered_out.loc["2023-01-31"].isna().all()
     assert filtered_out.loc["2023-02-01"].eq(1.0).all()
+
+
+def test_get_date_ranges_from_date(by_day):
+    date_ranges = plot.get_date_ranges_from_date(
+        by_day,
+        pandas.Timestamp.fromisoformat("2023-02-01"),
+    )
+
+    date_range = next(date_ranges)
+    assert date_range.table_name == "APCS"
+    assert date_range.from_date.isoformat() == "2023-02-01T00:00:00"
+    assert date_range.to_date.isoformat() == "2023-12-31T00:00:00"
+
+    date_range = next(date_ranges)
+    assert date_range.table_name == "Appointment"
+    assert date_range.from_date.isoformat() == "2023-02-01T00:00:00"
+    assert date_range.to_date.isoformat() == "2023-11-30T00:00:00"
+
+    with pytest.raises(StopIteration):
+        date_range = next(date_ranges)
