@@ -1,5 +1,3 @@
--- If you change the values of these variables,
--- then also change their equivalents in analysis/config.py.
 DECLARE @from_date DATE;
 SET @from_date = DATEFROMPARTS(2016, 1, 1);
 
