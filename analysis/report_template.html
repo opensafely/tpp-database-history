@@ -39,8 +39,14 @@
     <p>
         In the figures below,
         <em>event activity</em> (counts of events, such as in-patient hospital admissions)
-        is reported for data sources for the given dates.
+        is reported for each of {{ plots|length }} data sources for the given dates.
     </p>
+    <p>Data sources:</p>
+    <ol>
+        {% for plot in plots %}
+        <li><a href="#{{ plot.stem }}">{{ plot.stem }}</a></li>
+        {% endfor %}
+    </ol>
     <p>
         The database only includes patients who were registered at GP practices using TPP's SystmOne clinical information system
         (which is used by roughly 40% of GP practices)
@@ -48,12 +54,6 @@
         including those patients who have since deregistered or died.
         The database therefore captures event activity for these patients only.
     </p>
-    <p>Data sources:</p>
-    <ul>
-        {% for plot in plots %}
-        <li><a href="#{{ plot.stem }}">{{ plot.stem }}</a></li>
-        {% endfor %}
-    </ul>
     {% for plot in plots %}
     <h3 id="{{ plot.stem }}">{{ plot.stem }}</h3>
     {% for path in plot.paths %}
