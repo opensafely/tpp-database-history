@@ -32,14 +32,14 @@
     </p>
     <h2>Report Run Date</h2>
     <p>
-        This report was run on {{ to_date|date_format }}.
+        This report was run on {{ run_date|date_format }}.
         It reflects the state of the database on this date.
     </p>
     <h2>Event Activity</h2>
     <p>
         In the figures below,
         <em>event activity</em> (counts of events, such as in-patient hospital admissions)
-        is reported for data sources from the given date to {{ to_date|date_format }}.
+        is reported for data sources for the given dates.
     </p>
     <p>
         The database only includes patients who were registered at GP practices using TPP's SystmOne clinical information system

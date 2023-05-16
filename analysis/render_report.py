@@ -31,7 +31,7 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "to_date": config.TO_DATE,
+            "run_date": config.RUN_DATE,
             "plots": group_plots(
                 utils.OUTPUT_DIR / "plot_from_last_30_days",
                 utils.OUTPUT_DIR / "plot_from_2020",
