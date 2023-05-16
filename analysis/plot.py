@@ -1,5 +1,6 @@
 """Plot aggregated event counts.
 """
+import collections
 import textwrap
 
 import click
@@ -11,17 +12,32 @@ from analysis import click_types, utils
 
 
 @click.command()
-@click.option("--from-date", type=click_types.Date(), required=True)
+@click.option("--from-date", type=click_types.Timestamp())
+@click.option("--from-offset", type=int)
 @click.option(
     "--output",
     "d_out",
     type=click_types.Path(file_okay=False, resolve_path=True),
     required=True,
 )
-def main(from_date, d_out):
+def main(from_date, from_offset, d_out):
+    # Click doesn't support option groups (search for click-option-group on PyPI for
+    # why), so this ensures that at least one from_* option is set.
+    assert (from_date is not None) or (from_offset is not None)
+
     d_in = utils.OUTPUT_DIR / "aggregate"
-    by_day = read(d_in / "sum_by_day.csv.gz", from_date)
-    by_week = read(d_in / "mean_by_week.csv.gz", from_date)
+    by_day = read(d_in / "sum_by_day.csv.gz")
+    by_week = read(d_in / "mean_by_week.csv.gz")
+
+    if from_date is not None:
+        by_day_date_ranges = get_date_ranges_from_date(by_day, from_date)
+        by_week_date_ranges = get_date_ranges_from_date(by_week, from_date)
+    else:
+        by_day_date_ranges = get_date_ranges_from_offset(by_day, from_offset)
+        by_week_date_ranges = get_date_ranges_from_offset(by_week, from_offset)
+
+    by_day = filter_out(by_day, by_day_date_ranges)
+    by_week = filter_out(by_week, by_week_date_ranges)
 
     utils.makedirs(d_out)
 
@@ -31,13 +47,34 @@ def main(from_date, d_out):
         fig.savefig(d_out / f"{f_stem}.png")
 
 
-def read(f_in, from_date):
+def read(f_in):
     date_col = "event_date"
-    return pandas.read_csv(
-        f_in,
-        parse_dates=[date_col],
-        index_col=[date_col],
-    ).loc[from_date:]
+    return pandas.read_csv(f_in, parse_dates=[date_col], index_col=[date_col])
+
+
+def filter_out(data_frame, date_ranges):
+    copy = data_frame[:]
+    for table_name, from_date, to_date in date_ranges:
+        copy.loc[copy.index < from_date, table_name] = None
+        copy.loc[copy.index > to_date, table_name] = None
+    return copy
+
+
+_DateRange = collections.namedtuple("DateRange", ("table_name", "from_date", "to_date"))
+
+
+def get_date_ranges_from_date(data_frame, from_date):
+    for table_name, series in data_frame.items():
+        from_ = from_date
+        to_ = series.dropna().index.max()
+        yield _DateRange(table_name, from_, to_)
+
+
+def get_date_ranges_from_offset(data_frame, from_offset):
+    for table_name, series in data_frame.items():
+        to_ = series.dropna().index.max()
+        from_ = to_ - pandas.Timedelta(days=from_offset)
+        yield _DateRange(table_name, from_, to_)
 
 
 def plot(by_day, by_week):

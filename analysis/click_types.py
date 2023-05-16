@@ -1,16 +1,16 @@
-import datetime
 import pathlib
 
 import click
+import pandas
 
 
-class Date(click.ParamType):
-    """The Date type converts date strings into datetime.date objects."""
+class Timestamp(click.ParamType):
+    """The Timestamp type converts date strings into pandas.Timestamp objects."""
 
-    name = "Date"
+    name = "Timestamp"
 
     def convert(self, value, param, ctx):
-        return datetime.date.fromisoformat(value)
+        return pandas.Timestamp.fromisoformat(value)
 
 
 class Path(click.Path):
