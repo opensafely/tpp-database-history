@@ -32,6 +32,10 @@ def main():
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
             "run_date": config.RUN_DATE,
+            "from_date": {
+                "plot_from_2020": datetime.date(2020, 1, 1),
+                "plot_from_2016": datetime.date(2016, 1, 1),
+            },
             "plots": group_plots(
                 utils.OUTPUT_DIR / "plot_from_last_30_days",
                 utils.OUTPUT_DIR / "plot_from_2020",

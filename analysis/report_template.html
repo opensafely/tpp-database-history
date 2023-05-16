@@ -39,13 +39,19 @@
     <p>
         In the figures below,
         <em>event activity</em> (counts of events, such as in-patient hospital admissions)
-        is reported for each of {{ plots|length }} data sources for the given dates.
+        is reported for each of {{ plots|length }} data sources for each of three date ranges.
     </p>
     <p>Data sources:</p>
     <ol>
         {% for plot in plots %}
         <li><a href="#{{ plot.stem }}">{{ plot.stem }}</a></li>
         {% endfor %}
+    </ol>
+    <p>Date ranges:</p>
+    <ol>
+        <li>The last 30 days of event activity</li>
+        <li>Event activity for the period from {{ from_date.plot_from_2020|date_format }} to the report run date ({{ run_date|date_format }})</li>
+        <li>Event activity for the period from {{ from_date.plot_from_2016|date_format }} to the report run date ({{ run_date|date_format }})</li>
     </ol>
     <p>
         The database only includes patients who were registered at GP practices using TPP's SystmOne clinical information system
