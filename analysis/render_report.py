@@ -33,6 +33,7 @@ def main():
             "tpp_epoch_date": datetime.date(2009, 1, 1),
             "to_date": config.TO_DATE,
             "plots": group_plots(
+                utils.OUTPUT_DIR / "plot_from_last_30_days",
                 utils.OUTPUT_DIR / "plot_from_2020",
                 utils.OUTPUT_DIR / "plot_from_2016",
             ),

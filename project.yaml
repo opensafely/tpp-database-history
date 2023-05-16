@@ -41,8 +41,18 @@ actions:
       moderately_sensitive:
         plots: output/plot_from_2020/*.png
 
+  plot_from_last_30_days:
+    needs: [aggregate]
+    run: >
+      python:latest python -m analysis.plot
+        --from-offset 30
+        --output output/plot_from_last_30_days
+    outputs:
+      moderately_sensitive:
+        plots: output/plot_from_last_30_days/*.png
+
   render_report:
-    needs: [plot_from_2016, plot_from_2020]
+    needs: [plot_from_2016, plot_from_2020, plot_from_last_30_days]
     run: python:latest python -m analysis.render_report
     outputs:
       moderately_sensitive:

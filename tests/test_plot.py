@@ -43,3 +43,20 @@ def test_get_date_ranges_from_date(by_day):
 
     with pytest.raises(StopIteration):
         date_range = next(date_ranges)
+
+
+def test_get_date_ranges_from_offset(by_day):
+    date_ranges = plot.get_date_ranges_from_offset(by_day, 10)
+
+    date_range = next(date_ranges)
+    assert date_range.table_name == "APCS"
+    assert date_range.from_date.isoformat() == "2023-12-21T00:00:00"
+    assert date_range.to_date.isoformat() == "2023-12-31T00:00:00"
+
+    date_range = next(date_ranges)
+    assert date_range.table_name == "Appointment"
+    assert date_range.from_date.isoformat() == "2023-11-20T00:00:00"
+    assert date_range.to_date.isoformat() == "2023-11-30T00:00:00"
+
+    with pytest.raises(StopIteration):
+        date_range = next(date_ranges)

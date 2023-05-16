@@ -12,20 +12,29 @@ from analysis import click_types, utils
 
 
 @click.command()
-@click.option("--from-date", type=click_types.Timestamp(), required=True)
+@click.option("--from-date", type=click_types.Timestamp())
+@click.option("--from-offset", type=int)
 @click.option(
     "--output",
     "d_out",
     type=click_types.Path(file_okay=False, resolve_path=True),
     required=True,
 )
-def main(from_date, d_out):
+def main(from_date, from_offset, d_out):
+    # Click doesn't support option groups (search for click-option-group on PyPI for
+    # why), so this ensures that at least one from_* option is set.
+    assert (from_date is not None) or (from_offset is not None)
+
     d_in = utils.OUTPUT_DIR / "aggregate"
     by_day = read(d_in / "sum_by_day.csv.gz")
     by_week = read(d_in / "mean_by_week.csv.gz")
 
-    by_day_date_ranges = get_date_ranges_from_date(by_day, from_date)
-    by_week_date_ranges = get_date_ranges_from_date(by_week, from_date)
+    if from_date is not None:
+        by_day_date_ranges = get_date_ranges_from_date(by_day, from_date)
+        by_week_date_ranges = get_date_ranges_from_date(by_week, from_date)
+    else:
+        by_day_date_ranges = get_date_ranges_from_offset(by_day, from_offset)
+        by_week_date_ranges = get_date_ranges_from_offset(by_week, from_offset)
 
     by_day = filter_out(by_day, by_day_date_ranges)
     by_week = filter_out(by_week, by_week_date_ranges)
@@ -58,6 +67,13 @@ def get_date_ranges_from_date(data_frame, from_date):
     for table_name, series in data_frame.items():
         from_ = from_date
         to_ = series.dropna().index.max()
+        yield _DateRange(table_name, from_, to_)
+
+
+def get_date_ranges_from_offset(data_frame, from_offset):
+    for table_name, series in data_frame.items():
+        to_ = series.dropna().index.max()
+        from_ = to_ - pandas.Timedelta(days=from_offset)
         yield _DateRange(table_name, from_, to_)
 
 
