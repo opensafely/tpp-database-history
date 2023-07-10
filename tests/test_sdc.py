@@ -4,10 +4,10 @@ import pytest
 from analysis import sdc
 
 
-@pytest.mark.parametrize("data_in,data_out", [(4, 0), (5, 0), (6, 6)])
-def test_redact_le_five(data_in, data_out):
+@pytest.mark.parametrize("data_in,data_out", [(6, 0), (7, 0), (8, 8)])
+def test_redact_le_seven(data_in, data_out):
     series = pandas.Series(data_in)
-    redacted_series = sdc.redact_le_five(series)
+    redacted_series = sdc.redact_le_seven(series)
     assert series is not redacted_series
     assert list(redacted_series) == [data_out]
 
