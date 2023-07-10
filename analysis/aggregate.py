@@ -47,7 +47,7 @@ def aggregate(event_counts, offset, func):
     group_by, resample_by = event_counts.index.names
     return (
         event_counts.pipe(resample, offset, func)
-        .pipe(sdc.redact_le_five)
+        .pipe(sdc.redact_le_seven)
         .pipe(sdc.round_to_nearest_five)
         .unstack(level=group_by)
     )

@@ -12,7 +12,7 @@ def redact_le(series, threshold):
     return copy_of_series
 
 
-redact_le_five = functools.partial(redact_le, threshold=5)
+redact_le_seven = functools.partial(redact_le, threshold=7)
 
 
 def round_to_nearest(series, multiple):
