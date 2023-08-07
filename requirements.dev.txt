@@ -100,6 +100,10 @@ identify==2.5.22 \
     --hash=sha256:f0faad595a4687053669c112004178149f6c326db71ee999ae4636685753ad2f \
     --hash=sha256:f7a93d6cf98e29bd07663c60728e7a4057615068d7a639d132dc883b2d54d31e
     # via pre-commit
+importlib-resources==6.0.0 \
+    --hash=sha256:4cf94875a8368bd89531a756df9a9ebe1f150e0f885030b461237bc7f2d905f2 \
+    --hash=sha256:d952faee11004c045f785bb5636e8f885bed30dc3c940d5d42798a2a4541c185
+    # via sqlfluff
 iniconfig==2.0.0 \
     --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
     --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374
@@ -345,9 +349,9 @@ regex==2023.3.23 \
     --hash=sha256:fdf7ad455f1916b8ea5cdbc482d379f6daf93f3867b4232d14699867a5a13af7 \
     --hash=sha256:fffe57312a358be6ec6baeb43d253c36e5790e436b7bf5b7a38df360363e88e9
     # via sqlfluff
-sqlfluff==2.1.4 \
-    --hash=sha256:3884e375b9a884485263cf156b21ff55a38adadb7be6451e27ee6b8f1a75f018 \
-    --hash=sha256:86ee197cb6919e50962c4def5f64ba8bafb35b1ffab943b2e87fca137e3df2a2
+sqlfluff==2.2.0 \
+    --hash=sha256:0187da866f232add88038811c1b959af5176bfe2e2ded63a920dd1e413e65f2a \
+    --hash=sha256:abe02f237cd228e0385233c79937750b3d00cbb58dfe2c96191cc1dd7cb8855d
     # via -r requirements.dev.in
 tblib==1.7.0 \
     --hash=sha256:059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c \
@@ -383,6 +387,10 @@ wheel==0.40.0 \
     --hash=sha256:cd1196f3faee2b31968d626e1731c94f99cbdb67cf5a46e4f5656cbee7738873 \
     --hash=sha256:d236b20e7cb522daf2390fa84c55eea81c5c30190f90f29ae2ca1ad8355bf247
     # via pip-tools
+zipp==3.16.2 \
+    --hash=sha256:679e51dd4403591b2d6838a48de3d283f3d188412a9782faadf845f298736ba0 \
+    --hash=sha256:ebc15946aa78bd63458992fc81ec3b6f7b1e92d51c35e6de1c3804e73b799147
+    # via importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
 pip==23.0.1 \
