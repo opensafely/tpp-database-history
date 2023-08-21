@@ -349,9 +349,9 @@ regex==2023.3.23 \
     --hash=sha256:fdf7ad455f1916b8ea5cdbc482d379f6daf93f3867b4232d14699867a5a13af7 \
     --hash=sha256:fffe57312a358be6ec6baeb43d253c36e5790e436b7bf5b7a38df360363e88e9
     # via sqlfluff
-sqlfluff==2.2.1 \
-    --hash=sha256:86b3f85388e10c69eeea12ccaa169f66248e9240d57f22b66e84048cc7333b08 \
-    --hash=sha256:93b4c49a6640e15fa5fddbc022d0544675b9d4ac382d68da029d07c713cb6e7e
+sqlfluff==2.3.0 \
+    --hash=sha256:b1ee83ad589ea843388d57d6e114dece5c59e5072e9f0fb26d9c8447d09240f8 \
+    --hash=sha256:bd9d3667db9eaf349665ba1d1cba90b3cbadc106a96f1740d0a1dbb776b4e380
     # via -r requirements.dev.in
 tblib==1.7.0 \
     --hash=sha256:059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c \
@@ -368,6 +368,7 @@ tomli==2.0.1 \
     #   black
     #   build
     #   pip-tools
+    #   pyproject-hooks
     #   pytest
 tqdm==4.65.0 \
     --hash=sha256:1871fb68a86b8fb3b59ca4cdd3dcccbc7e6d613eeed31f4c332531977b89beb5 \
