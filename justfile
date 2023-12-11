@@ -96,10 +96,10 @@ upgrade env package="": virtualenv
     FORCE=true "{{ just_executable() }}" requirements-{{ env }} $opts
 
 
-# *ARGS is variadic, 0 or more. This allows us to do `just test -k match`, for example.
+# *args is variadic, 0 or more. This allows us to do `just test -k match`, for example.
 # Run the tests
-test *ARGS: devenv
-    $BIN/opensafely exec python -m pytest --disable-warnings {{ ARGS }}
+test *args: devenv
+    $BIN/opensafely exec python -m pytest --disable-warnings {{ args }}
 
 
 black *args=".": devenv
@@ -123,5 +123,5 @@ fix: devenv
 
 
 # Run JupyterLab
-run *ARGS: devenv
-    opensafely jupyter {{ ARGS }}
+run *args: devenv
+    opensafely jupyter {{ args }}
