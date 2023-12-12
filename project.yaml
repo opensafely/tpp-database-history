@@ -19,7 +19,7 @@ actions:
     run: python:latest python -m analysis.aggregate
     outputs:
       moderately_sensitive:
-        aggregates: output/aggregate/*_by_*.csv.gz
+        aggregates: output/aggregate/*_by_*.csv
 
   plot_from_2016:
     needs: [aggregate]

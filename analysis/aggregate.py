@@ -11,8 +11,8 @@ def main():
 
     d_out = utils.OUTPUT_DIR / "aggregate"
     utils.makedirs(d_out)
-    aggregate(event_counts, "D", "sum").to_csv(d_out / "sum_by_day.csv.gz")
-    aggregate(event_counts, "W", "mean").to_csv(d_out / "mean_by_week.csv.gz")
+    aggregate(event_counts, "D", "sum").to_csv(d_out / "sum_by_day.csv")
+    aggregate(event_counts, "W", "mean").to_csv(d_out / "mean_by_week.csv")
 
 
 def read(f_in):
