@@ -2,6 +2,7 @@ import functools
 
 import pandas
 import pytest
+from pandas.testing import assert_frame_equal
 
 from analysis import aggregate
 
@@ -27,6 +28,21 @@ def make_series(event_dates):
         names=("table_name", "event_date"),
     )
     return pandas.Series(index=index, data=1, name="event_count")
+
+
+def test_aggregate_mean_by_week():
+    series = make_series(["2023-01-01", "2023-01-03"])
+    series.loc[("table_1",)] = 7.1
+    series.loc[("table_2",)] = 7.5
+    mean_by_week = aggregate.aggregate(series, "W", "mean")
+    assert_frame_equal(
+        mean_by_week,
+        pandas.DataFrame(
+            [(5, 10), (5, 10)],  # rows
+            index=pandas.DatetimeIndex(["2022-12-25", "2023-01-01"], name="event_date"),
+            columns=pandas.Index(["table_1", "table_2"], name="table_name"),
+        ),
+    )
 
 
 @pytest.mark.parametrize("func,exp", [("sum", [1, 0, 1]), ("mean", [1, 0, 1])])
