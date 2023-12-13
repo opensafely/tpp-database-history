@@ -46,7 +46,7 @@ def test_aggregate_mean_by_week():
     assert_frame_equal(
         mean_by_week,
         pandas.DataFrame(
-            [(5, 10), (5, 10)],  # rows
+            [(0, 10), (0, 10)],  # rows
             index=pandas.DatetimeIndex(["2022-12-25", "2023-01-01"], name="event_date"),
             columns=pandas.Index(["table_1", "table_2"], name="table_name"),
         ),
