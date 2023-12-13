@@ -100,7 +100,7 @@ def plot(by_day, by_week):
         ax.grid(True)
         ax.margins(x=0)
         min_ts, max_ts = [num2date(x) for x in ax.get_xlim()]
-        ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="medium")
+        ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="large")
         ax.set_ylabel("Event Counts")
         ax.set_ylim(0)
         ax.legend(loc="upper right")
