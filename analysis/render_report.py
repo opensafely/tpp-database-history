@@ -58,14 +58,9 @@ def b64encode(path):
     return f"data:{mtype};base64, {encoded}"
 
 
-def date_format(date):
-    """Formats the given date as, for example, "1 January 2023"."""
-    return f"{date:%-d %B %Y}"  # the - removes the leading zero, but not on Windows
-
-
 # register template filters
 ENVIRONMENT.filters["b64encode"] = b64encode
-ENVIRONMENT.filters["date_format"] = date_format
+ENVIRONMENT.filters["date_format"] = utils.date_format
 
 
 def render_report(data):

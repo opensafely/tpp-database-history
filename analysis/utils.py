@@ -27,3 +27,8 @@ def slugify(s):
     # remove leading and trailing dashes and underscores
     s = s.strip("-_")
     return s.lower()
+
+
+def date_format(date):
+    """Formats the given date as, for example, "1 January 2023"."""
+    return f"{date:%-d %B %Y}"  # the - removes the leading zero, but not on Windows
