@@ -39,15 +39,15 @@ def test_aggregate_sum_by_day():
 
 
 def test_aggregate_mean_by_week():
-    series = make_event_counts(["table_1", "table_2"], ["2023-01-01", "2023-01-03"])
-    series.loc[("table_1",)] = 7.1
-    series.loc[("table_2",)] = 7.5
+    series = make_event_counts(["table_1"], ["2023-01-01", "2023-01-03", "2023-01-04"])
+    series.loc[("table_1", "2023-01-03")] = 8
+    series.loc[("table_1", "2023-01-04")] = 9
     mean_by_week = aggregate.aggregate(series, "W", "mean")
     assert_frame_equal(
         mean_by_week,
         pandas.DataFrame(
-            [(0, 10), (0, 10)],  # rows
+            [(0,), (10,)],  # rows
             index=pandas.DatetimeIndex(["2022-12-25", "2023-01-01"], name="event_date"),
-            columns=pandas.Index(["table_1", "table_2"], name="table_name"),
+            columns=pandas.Index(["table_1"], name="table_name"),
         ),
     )
