@@ -6,7 +6,6 @@ import textwrap
 import click
 import pandas
 from matplotlib import pyplot
-from matplotlib.dates import num2date
 
 from analysis import click_types, utils
 
@@ -41,7 +40,7 @@ def main(from_date, from_offset, d_out):
 
     utils.makedirs(d_out)
 
-    figs_cols = plot(by_day, by_week)
+    figs_cols = plot(by_day, by_week, get_plot_title(from_date, from_offset))
     for fig, col in figs_cols:
         f_stem = utils.slugify(col)
         fig.savefig(d_out / f"{f_stem}.png")
@@ -77,7 +76,14 @@ def get_date_ranges_from_offset(data_frame, from_offset):
         yield _DateRange(table_name, from_, to_)
 
 
-def plot(by_day, by_week):
+def get_plot_title(from_date, from_offset):
+    if from_date is not None:
+        return f"Event activity for the period from {utils.date_format(from_date)} to the report run date"
+    if from_offset is not None:
+        return f"The last {from_offset} days of event activity"
+
+
+def plot(by_day, by_week, plot_title):
     cols = by_day.columns.union(by_week.columns)
     for col in cols:
         fig, ax = pyplot.subplots(figsize=(15, 7))
@@ -99,8 +105,7 @@ def plot(by_day, by_week):
 
         ax.grid(True)
         ax.margins(x=0)
-        min_ts, max_ts = [num2date(x) for x in ax.get_xlim()]
-        ax.set_title(f"From {min_ts:%Y-%m-%d} to {max_ts:%Y-%m-%d}", fontsize="medium")
+        ax.set_title(plot_title)
         ax.set_ylabel("Event Counts")
         ax.set_ylim(0)
         ax.legend(loc="upper right")
