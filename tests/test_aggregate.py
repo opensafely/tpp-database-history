@@ -5,9 +5,9 @@ from pandas.testing import assert_frame_equal
 from analysis import aggregate
 
 
-def make_event_counts(event_dates):
+def make_event_counts(table_names, event_dates):
     index = pandas.MultiIndex.from_product(
-        (["table_1", "table_2"], pandas.to_datetime(event_dates)),
+        (table_names, pandas.to_datetime(event_dates)),
         names=("table_name", "event_date"),
     )
     return pandas.Series(index=index, data=1, name="event_count")
@@ -22,7 +22,7 @@ def test_read_with_unparsable_date(tmp_path):
 
 
 def test_aggregate_sum_by_day():
-    series = make_event_counts(["2023-01-01", "2023-01-03"])
+    series = make_event_counts(["table_1", "table_2"], ["2023-01-01", "2023-01-03"])
     series.loc[("table_1",)] = 7
     series.loc[("table_2",)] = 8
     sum_by_day = aggregate.aggregate(series, "D", "sum")
@@ -39,7 +39,7 @@ def test_aggregate_sum_by_day():
 
 
 def test_aggregate_mean_by_week():
-    series = make_event_counts(["2023-01-01", "2023-01-03"])
+    series = make_event_counts(["table_1", "table_2"], ["2023-01-01", "2023-01-03"])
     series.loc[("table_1",)] = 7.1
     series.loc[("table_2",)] = 7.5
     mean_by_week = aggregate.aggregate(series, "W", "mean")
