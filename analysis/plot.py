@@ -26,8 +26,8 @@ def main(from_date, from_offset, d_out):
     assert (from_date is not None) or (from_offset is not None)
 
     d_in = utils.OUTPUT_DIR / "aggregate"
-    by_day = read(d_in / "sum_by_day.csv.gz")
-    by_week = read(d_in / "mean_by_week.csv.gz")
+    by_day = read(d_in / "sum_by_day.csv")
+    by_week = read(d_in / "mean_by_week.csv")
 
     if from_date is not None:
         by_day_date_ranges = get_date_ranges_from_date(by_day, from_date)
