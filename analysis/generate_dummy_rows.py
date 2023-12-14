@@ -27,7 +27,7 @@ def main():
         ("SGSS_Negative", "2020-01-01", "2022-11-17"),
         ("SGSS_Positive", "2020-01-03", "2022-01-29"),
     ]
-    f_out = utils.OUTPUT_DIR / "generate_dummy_rows" / "dummy_rows.csv.gz"
+    f_out = utils.ANALYSIS_DIR / "dummy_rows.csv.gz"
 
     utils.makedirs(f_out.parent)
     data_frame = make_dummy_rows(tables)

@@ -7,7 +7,7 @@ actions:
   query:
     run: >
       sqlrunner:latest
-        --dummy-data-file output/generate_dummy_rows/dummy_rows.csv.gz
+        --dummy-data-file analysis/dummy_rows.csv.gz
         --output output/query/rows.csv.gz
         analysis/query.sql
     outputs:
