@@ -9,10 +9,13 @@ actions:
       sqlrunner:latest
         --dummy-data-file analysis/dummy_rows.csv.gz
         --output output/query/rows.csv.gz
+        --log-file output/query/log.json
         analysis/query.sql
     outputs:
       highly_sensitive:
         rows: output/query/rows.csv.gz
+      moderately_sensitive:
+        log: output/query/log.json
 
   aggregate:
     needs: [query]
@@ -52,7 +55,7 @@ actions:
         plots: output/plot_from_last_30_days/*.png
 
   render_report:
-    needs: [plot_from_2016, plot_from_2020, plot_from_last_30_days]
+    needs: [query, plot_from_2016, plot_from_2020, plot_from_last_30_days]
     run: python:latest python -m analysis.render_report
     outputs:
       moderately_sensitive:
