@@ -60,3 +60,8 @@ def test_get_date_ranges_from_offset(by_day):
 
     with pytest.raises(StopIteration):
         date_range = next(date_ranges)
+
+
+@pytest.mark.parametrize("string,slug", [("Ça va?", "ca-va"), ("_so--so_", "so-so")])
+def test_slugify(string, slug):
+    assert plot.slugify(string) == slug

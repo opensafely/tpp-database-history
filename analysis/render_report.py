@@ -6,20 +6,22 @@ For more information about Jinja, see:
 import base64
 import collections
 import datetime
+import json
 import mimetypes
 
+import dateutil.parser
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from analysis import utils
+from analysis import ANALYSIS_DIR, OUTPUT_DIR, utils
 
 ENVIRONMENT = Environment(
-    loader=FileSystemLoader(utils.ANALYSIS_DIR),
+    loader=FileSystemLoader(ANALYSIS_DIR),
     undefined=StrictUndefined,
 )
 
 
 def main():
-    f_out = utils.OUTPUT_DIR / "render_report" / "report.html"
+    f_out = OUTPUT_DIR / "render_report" / "report.html"
     utils.makedirs(f_out.parent)
     rendered_report = render_report(
         {
@@ -30,15 +32,15 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "run_date": utils.get_run_date(),
+            "run_date": get_run_date(),
             "from_date": {
                 "plot_from_2020": datetime.date(2020, 2, 1),
                 "plot_from_2016": datetime.date(2016, 1, 1),
             },
             "plots": group_plots(
-                utils.OUTPUT_DIR / "plot_from_last_30_days",
-                utils.OUTPUT_DIR / "plot_from_2020",
-                utils.OUTPUT_DIR / "plot_from_2016",
+                OUTPUT_DIR / "plot_from_last_30_days",
+                OUTPUT_DIR / "plot_from_2020",
+                OUTPUT_DIR / "plot_from_2016",
             ),
         }
     )
@@ -65,6 +67,21 @@ ENVIRONMENT.filters["date_format"] = utils.date_format
 def render_report(data):
     template = ENVIRONMENT.get_template("report_template.html")
     return template.render(data)
+
+
+def get_log():
+    return [
+        json.loads(line)
+        for line in (OUTPUT_DIR / "query" / "log.json").read_text().splitlines()
+    ]
+
+
+def get_run_date():
+    by_event = {d["event"]: d for d in get_log()}
+    timestamp = by_event.get("finish_executing_sql_query", {}).get(
+        "timestamp", "9999-01-01T00:00:00"
+    )
+    return dateutil.parser.parse(timestamp)
 
 
 def group_plots(*paths, suffix=".png"):

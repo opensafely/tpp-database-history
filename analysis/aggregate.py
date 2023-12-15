@@ -1,15 +1,21 @@
 """Aggregate event counts and apply Statistical Disclosure Control (SDC) functions.
+
+For more information, see:
+https://docs.opensafely.org/releasing-files/
 """
 import pandas
 
-from analysis import sdc, utils
+from analysis import OUTPUT_DIR, utils
+
+SUPPRESSION_THRESHOLD = 7
+ROUNDING_MULTIPLE = 5
 
 
 def main():
-    d_in = utils.OUTPUT_DIR / "query"
+    d_in = OUTPUT_DIR / "query"
     event_counts = read(d_in / "rows.csv.gz")
 
-    d_out = utils.OUTPUT_DIR / "aggregate"
+    d_out = OUTPUT_DIR / "aggregate"
     utils.makedirs(d_out)
     aggregate(event_counts, "D", "sum").to_csv(d_out / "sum_by_day.csv")
     aggregate(event_counts, "W", "mean").to_csv(d_out / "mean_by_week.csv")
@@ -49,10 +55,24 @@ def aggregate(event_counts, offset, func):
         event_counts.pipe(resample, offset, func)
         .round()  # to nearest integer
         .astype(int)
-        .pipe(sdc.redact_le_seven)
-        .pipe(sdc.round_to_nearest_five)
+        .pipe(redact_le, SUPPRESSION_THRESHOLD)
+        .pipe(round_to_nearest, ROUNDING_MULTIPLE)
         .unstack(level=group_by)
     )
+
+
+def redact_le(series, threshold):
+    copy_of_series = series.copy(deep=True)
+    copy_of_series[copy_of_series <= threshold] = 0
+    return copy_of_series
+
+
+def round_to_nearest(series, multiple):
+    def rounder(value):
+        assert isinstance(value, int), f"The value to round ({value}) must be an int"
+        return int(multiple * round(value / multiple, 0))
+
+    return series.apply(rounder)
 
 
 def resample(event_counts, offset, func):

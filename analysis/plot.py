@@ -1,22 +1,47 @@
 """Plot aggregated event counts.
 """
 import collections
+import pathlib
+import re
 import textwrap
+import unicodedata
 
 import click
 import pandas
 from matplotlib import pyplot
 
-from analysis import click_types, utils
+from analysis import OUTPUT_DIR, utils
+
+
+class ClickTimestamp(click.ParamType):
+    """The Timestamp type converts date strings into pandas.Timestamp objects."""
+
+    name = "Timestamp"
+
+    def convert(self, value, param, ctx):
+        return pandas.Timestamp.fromisoformat(value)
+
+
+class ClickPath(click.Path):
+    """The Path type converts path strings into pathlib.Path objects.
+
+    This conversion is supported by Click>=8.0.
+    """
+
+    name = "Path"
+
+    def convert(self, value, param, ctx):
+        path = super().convert(value, param, ctx)
+        return pathlib.Path(path)
 
 
 @click.command()
-@click.option("--from-date", type=click_types.Timestamp())
+@click.option("--from-date", type=ClickTimestamp())
 @click.option("--from-offset", type=int)
 @click.option(
     "--output",
     "d_out",
-    type=click_types.Path(file_okay=False, resolve_path=True),
+    type=ClickPath(file_okay=False, resolve_path=True),
     required=True,
 )
 def main(from_date, from_offset, d_out):
@@ -24,7 +49,7 @@ def main(from_date, from_offset, d_out):
     # why), so this ensures that at least one from_* option is set.
     assert (from_date is not None) or (from_offset is not None)
 
-    d_in = utils.OUTPUT_DIR / "aggregate"
+    d_in = OUTPUT_DIR / "aggregate"
     by_day = read(d_in / "sum_by_day.csv")
     by_week = read(d_in / "mean_by_week.csv")
 
@@ -42,7 +67,7 @@ def main(from_date, from_offset, d_out):
 
     figs_cols = plot(by_day, by_week, get_plot_title(from_date, from_offset))
     for fig, col in figs_cols:
-        f_stem = utils.slugify(col)
+        f_stem = slugify(col)
         fig.savefig(d_out / f"{f_stem}.png")
 
 
@@ -111,6 +136,21 @@ def plot(by_day, by_week, plot_title):
         ax.legend(loc="upper right")
 
         yield fig, col
+
+
+def slugify(s):
+    # Based on Django's slugify. For more information, see:
+    # https://github.com/django/django/blob/4.1.7/django/utils/text.py#L399-L417
+
+    # convert to ASCII
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+    # remove characters that are not word, white space, or dash
+    s = re.sub(r"[^\w\s-]", "", s)
+    # replace one or more dash or one or more white space with one dash
+    s = re.sub(r"[-\s]+", "-", s)
+    # remove leading and trailing dashes and underscores
+    s = s.strip("-_")
+    return s.lower()
 
 
 if __name__ == "__main__":
