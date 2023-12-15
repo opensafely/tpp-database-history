@@ -10,8 +10,7 @@ import mimetypes
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from analysis import config, utils
-
+from analysis import utils
 
 ENVIRONMENT = Environment(
     loader=FileSystemLoader(utils.ANALYSIS_DIR),
@@ -31,7 +30,7 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "run_date": config.RUN_DATE,
+            "run_date": utils.get_run_date(),
             "from_date": {
                 "plot_from_2020": datetime.date(2020, 2, 1),
                 "plot_from_2016": datetime.date(2016, 1, 1),
