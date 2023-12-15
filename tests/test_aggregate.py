@@ -51,3 +51,19 @@ def test_aggregate_mean_by_week():
             columns=pandas.Index(["table_1"], name="table_name"),
         ),
     )
+
+
+@pytest.mark.parametrize("data_in,data_out", [(6, 0), (7, 0), (8, 8)])
+def test_redact_le(data_in, data_out):
+    series = pandas.Series(data_in)
+    redacted_series = aggregate.redact_le(series, aggregate.SUPPRESSION_THRESHOLD)
+    assert series is not redacted_series
+    assert list(redacted_series) == [data_out]
+
+
+@pytest.mark.parametrize("data_in,data_out", [(1, 0), (3, 5), (5, 5), (7, 5), (9, 10)])
+def test_round_to_nearest(data_in, data_out):
+    series = pandas.Series(data_in)
+    rounded_series = aggregate.round_to_nearest(series, aggregate.ROUNDING_MULTIPLE)
+    assert series is not rounded_series
+    assert list(rounded_series) == [data_out]
