@@ -6,8 +6,7 @@ opensafely exec python:latest python -m analysis.generate_dummy_rows
 import pandas
 from numpy import random
 
-from analysis import utils
-
+from analysis import ANALYSIS_DIR, utils
 
 rng = random.default_rng(seed=1)
 
@@ -27,7 +26,7 @@ def main():
         ("SGSS_Negative", "2020-01-01", "2022-11-17"),
         ("SGSS_Positive", "2020-01-03", "2022-01-29"),
     ]
-    f_out = utils.ANALYSIS_DIR / "dummy_rows.csv.gz"
+    f_out = ANALYSIS_DIR / "dummy_rows.csv.gz"
 
     utils.makedirs(f_out.parent)
     data_frame = make_dummy_rows(tables)

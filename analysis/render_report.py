@@ -12,16 +12,16 @@ import mimetypes
 import dateutil.parser
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from analysis import utils
+from analysis import ANALYSIS_DIR, OUTPUT_DIR, utils
 
 ENVIRONMENT = Environment(
-    loader=FileSystemLoader(utils.ANALYSIS_DIR),
+    loader=FileSystemLoader(ANALYSIS_DIR),
     undefined=StrictUndefined,
 )
 
 
 def main():
-    f_out = utils.OUTPUT_DIR / "render_report" / "report.html"
+    f_out = OUTPUT_DIR / "render_report" / "report.html"
     utils.makedirs(f_out.parent)
     rendered_report = render_report(
         {
@@ -38,9 +38,9 @@ def main():
                 "plot_from_2016": datetime.date(2016, 1, 1),
             },
             "plots": group_plots(
-                utils.OUTPUT_DIR / "plot_from_last_30_days",
-                utils.OUTPUT_DIR / "plot_from_2020",
-                utils.OUTPUT_DIR / "plot_from_2016",
+                OUTPUT_DIR / "plot_from_last_30_days",
+                OUTPUT_DIR / "plot_from_2020",
+                OUTPUT_DIR / "plot_from_2016",
             ),
         }
     )
@@ -72,7 +72,7 @@ def render_report(data):
 def get_log():
     return [
         json.loads(line)
-        for line in (utils.OUTPUT_DIR / "query" / "log.json").read_text().splitlines()
+        for line in (OUTPUT_DIR / "query" / "log.json").read_text().splitlines()
     ]
 
 

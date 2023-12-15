@@ -5,17 +5,17 @@ https://docs.opensafely.org/releasing-files/
 """
 import pandas
 
-from analysis import utils
+from analysis import OUTPUT_DIR, utils
 
 SUPPRESSION_THRESHOLD = 7
 ROUNDING_MULTIPLE = 5
 
 
 def main():
-    d_in = utils.OUTPUT_DIR / "query"
+    d_in = OUTPUT_DIR / "query"
     event_counts = read(d_in / "rows.csv.gz")
 
-    d_out = utils.OUTPUT_DIR / "aggregate"
+    d_out = OUTPUT_DIR / "aggregate"
     utils.makedirs(d_out)
     aggregate(event_counts, "D", "sum").to_csv(d_out / "sum_by_day.csv")
     aggregate(event_counts, "W", "mean").to_csv(d_out / "mean_by_week.csv")
