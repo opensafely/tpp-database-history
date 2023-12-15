@@ -1,22 +1,45 @@
 """Plot aggregated event counts.
 """
 import collections
+import pathlib
 import textwrap
 
 import click
 import pandas
 from matplotlib import pyplot
 
-from analysis import click_types, utils
+from analysis import utils
+
+
+class ClickTimestamp(click.ParamType):
+    """The Timestamp type converts date strings into pandas.Timestamp objects."""
+
+    name = "Timestamp"
+
+    def convert(self, value, param, ctx):
+        return pandas.Timestamp.fromisoformat(value)
+
+
+class ClickPath(click.Path):
+    """The Path type converts path strings into pathlib.Path objects.
+
+    This conversion is supported by Click>=8.0.
+    """
+
+    name = "Path"
+
+    def convert(self, value, param, ctx):
+        path = super().convert(value, param, ctx)
+        return pathlib.Path(path)
 
 
 @click.command()
-@click.option("--from-date", type=click_types.Timestamp())
+@click.option("--from-date", type=ClickTimestamp())
 @click.option("--from-offset", type=int)
 @click.option(
     "--output",
     "d_out",
-    type=click_types.Path(file_okay=False, resolve_path=True),
+    type=ClickPath(file_okay=False, resolve_path=True),
     required=True,
 )
 def main(from_date, from_offset, d_out):
