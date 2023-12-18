@@ -33,6 +33,7 @@ actions:
     outputs:
       moderately_sensitive:
         plots: output/plot_from_2016/*.png
+        metadata: output/plot_from_2016/metadata.json
 
   plot_from_2020:
     needs: [aggregate]
@@ -43,6 +44,7 @@ actions:
     outputs:
       moderately_sensitive:
         plots: output/plot_from_2020/*.png
+        metadata: output/plot_from_2020/metadata.json
 
   plot_from_last_30_days:
     needs: [aggregate]
@@ -53,6 +55,7 @@ actions:
     outputs:
       moderately_sensitive:
         plots: output/plot_from_last_30_days/*.png
+        metadata: output/plot_from_last_30_days/metadata.json
 
   render_report:
     needs: [query, plot_from_2016, plot_from_2020, plot_from_last_30_days]

@@ -8,6 +8,7 @@ import collections
 import datetime
 import json
 import mimetypes
+import pathlib
 
 import dateutil.parser
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -37,11 +38,7 @@ def main():
                 "plot_from_2020": datetime.date(2020, 2, 1),
                 "plot_from_2016": datetime.date(2016, 1, 1),
             },
-            "plots": group_plots(
-                OUTPUT_DIR / "plot_from_last_30_days",
-                OUTPUT_DIR / "plot_from_2020",
-                OUTPUT_DIR / "plot_from_2016",
-            ),
+            "plots": group_plots(),
         }
     )
     f_out.write_text(rendered_report, encoding="utf-8")
@@ -84,24 +81,19 @@ def get_run_date():
     return dateutil.parser.parse(timestamp)
 
 
-def group_plots(*paths, suffix=".png"):
-    """Groups similarly named plots.
+def get_metadata():
+    for plot_group in ["plot_from_last_30_days", "plot_from_2020", "plot_from_2016"]:
+        path = OUTPUT_DIR / plot_group / "metadata.json"
+        yield json.loads(path.read_text())
 
-    Groups plots, files with the given suffix that share the same name, into a dict with
-    stem and paths keys. Returns an list of such dicts for all plots at the given paths.
-    """
-    mapping = collections.defaultdict(list)
 
-    def mapper(parent):
-        for child in parent.glob(f"*{suffix}"):
-            mapping[child.stem].append(child)
-
-    for path in paths:
-        assert path.is_dir()
-        mapper(path)
-
-    mapping = dict(sorted(mapping.items()))
-    return [{"stem": k, "paths": v} for k, v in mapping.items()]
+def group_plots():
+    """Groups plots of event activity by table name."""
+    groups = collections.defaultdict(list)
+    for metadata in get_metadata():
+        for col, path in metadata["paths"].items():
+            groups[col].append(pathlib.Path(path))
+    return [{"table_name": k, "paths": v} for k, v in groups.items()]
 
 
 if __name__ == "__main__":
