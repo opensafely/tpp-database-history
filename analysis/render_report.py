@@ -10,7 +10,6 @@ import json
 import mimetypes
 import pathlib
 
-import dateutil.parser
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from analysis import ANALYSIS_DIR, OUTPUT_DIR, utils
@@ -33,7 +32,7 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "run_date": get_run_date(),
+            "run_date": utils.get_run_date(),
             "plot_titles": get_plot_titles(),
             "plots": group_plots(),
         }
@@ -61,21 +60,6 @@ ENVIRONMENT.filters["date_format"] = utils.date_format
 def render_report(data):
     template = ENVIRONMENT.get_template("report_template.html")
     return template.render(data)
-
-
-def get_log():
-    return [
-        json.loads(line)
-        for line in (OUTPUT_DIR / "query" / "log.json").read_text().splitlines()
-    ]
-
-
-def get_run_date():
-    by_event = {d["event"]: d for d in get_log()}
-    timestamp = by_event.get("finish_executing_sql_query", {}).get(
-        "timestamp", "9999-01-01T00:00:00"
-    )
-    return dateutil.parser.parse(timestamp)
 
 
 def get_metadata():
