@@ -1,6 +1,7 @@
 """Plot aggregated event counts.
 """
 import collections
+import json
 import pathlib
 import re
 import textwrap
@@ -65,10 +66,16 @@ def main(from_date, from_offset, d_out):
 
     utils.makedirs(d_out)
 
+    metadata = {"paths": {}}
     figs_cols = plot(by_day, by_week, get_plot_title(from_date, from_offset))
     for fig, col in figs_cols:
         f_stem = slugify(col)
-        fig.savefig(d_out / f"{f_stem}.png")
+        f_path = d_out / f"{f_stem}.png"
+        metadata["paths"][col] = str(f_path)
+        fig.savefig(f_path)
+
+    with (d_out / "metadata.json").open("w") as fp:
+        json.dump(metadata, fp, indent=4)
 
 
 def read(f_in):
