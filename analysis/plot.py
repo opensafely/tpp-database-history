@@ -111,7 +111,8 @@ def get_date_ranges_from_offset(data_frame, from_offset):
 
 def get_plot_title(from_date, from_offset):
     if from_date is not None:
-        return f"Event activity from the first occurrence on or after {utils.date_format(from_date)} to the last occurrence on or before the report run date"
+        run_date = utils.get_run_date()
+        return f"Event activity from the first occurrence on or after {utils.date_format(from_date)} to the last occurrence on or before the report run date ({utils.date_format(run_date)})"
     if from_offset is not None:
         return f"The most recent {from_offset} days for which there is event activity"
 
