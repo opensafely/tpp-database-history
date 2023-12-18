@@ -44,7 +44,7 @@
     <p>Data sources:</p>
     <ol>
         {% for plot in plots %}
-        <li><a href="#{{ plot.stem }}">{{ plot.stem }}</a></li>
+        <li><a href="#{{ plot.table_name }}">{{ plot.table_name }}</a></li>
         {% endfor %}
     </ol>
     <p>Date ranges:</p>
@@ -61,7 +61,7 @@
         The OpenSAFELY-TPP database therefore captures event activity for these patients only.
     </p>
     {% for plot in plots %}
-    <h3 id="{{ plot.stem }}">{{ plot.stem }}</h3>
+    <h3 id="{{ plot.table_name }}">{{ plot.table_name }}</h3>
     {% for path in plot.paths %}
     <p><img src="{{ path|b64encode }}" title="Image generated from {{ path }}"></p>
     {% endfor %}

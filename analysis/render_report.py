@@ -93,7 +93,7 @@ def group_plots():
     for metadata in get_metadata():
         for col, path in metadata["paths"].items():
             groups[col].append(pathlib.Path(path))
-    return [{"stem": k, "paths": v} for k, v in groups.items()]
+    return [{"table_name": k, "paths": v} for k, v in groups.items()]
 
 
 if __name__ == "__main__":
