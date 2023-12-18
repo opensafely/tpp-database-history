@@ -25,7 +25,7 @@ actions:
         aggregates: output/aggregate/*_by_*.csv
 
   plot_from_2016:
-    needs: [aggregate]
+    needs: [query, aggregate]
     run: >
       python:latest python -m analysis.plot
         --from-date 2016-01-01
@@ -36,7 +36,7 @@ actions:
         metadata: output/plot_from_2016/metadata.json
 
   plot_from_2020:
-    needs: [aggregate]
+    needs: [query, aggregate]
     run: >
       python:latest python -m analysis.plot
         --from-date 2020-02-01
@@ -47,7 +47,7 @@ actions:
         metadata: output/plot_from_2020/metadata.json
 
   plot_from_last_30_days:
-    needs: [aggregate]
+    needs: [query, aggregate]
     run: >
       python:latest python -m analysis.plot
         --from-offset 30

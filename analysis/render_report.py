@@ -10,7 +10,6 @@ import json
 import mimetypes
 import pathlib
 
-import dateutil.parser
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from analysis import ANALYSIS_DIR, OUTPUT_DIR, utils
@@ -33,11 +32,8 @@ def main():
             # It's passed as a template variable so that we can format it consistently
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
-            "run_date": get_run_date(),
-            "from_date": {
-                "plot_from_2020": datetime.date(2020, 2, 1),
-                "plot_from_2016": datetime.date(2016, 1, 1),
-            },
+            "run_date": utils.get_run_date(),
+            "plot_titles": get_plot_titles(),
             "plots": group_plots(),
         }
     )
@@ -66,25 +62,15 @@ def render_report(data):
     return template.render(data)
 
 
-def get_log():
-    return [
-        json.loads(line)
-        for line in (OUTPUT_DIR / "query" / "log.json").read_text().splitlines()
-    ]
-
-
-def get_run_date():
-    by_event = {d["event"]: d for d in get_log()}
-    timestamp = by_event.get("finish_executing_sql_query", {}).get(
-        "timestamp", "9999-01-01T00:00:00"
-    )
-    return dateutil.parser.parse(timestamp)
-
-
 def get_metadata():
     for plot_group in ["plot_from_last_30_days", "plot_from_2020", "plot_from_2016"]:
         path = OUTPUT_DIR / plot_group / "metadata.json"
         yield json.loads(path.read_text())
+
+
+def get_plot_titles():
+    for metadata in get_metadata():
+        yield metadata["plot_title"]
 
 
 def group_plots():
