@@ -66,8 +66,9 @@ def main(from_date, from_offset, d_out):
 
     utils.makedirs(d_out)
 
-    metadata = {"paths": {}}
-    figs_table_names = plot(by_day, by_week, get_plot_title(from_date, from_offset))
+    plot_title = get_plot_title(from_date, from_offset)
+    metadata = {"paths": {}, "plot_title": plot_title}
+    figs_table_names = plot(by_day, by_week, plot_title)
     for fig, table_name in figs_table_names:
         f_stem = slugify(table_name)
         f_path = d_out / f"{f_stem}.png"

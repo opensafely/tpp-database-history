@@ -34,10 +34,7 @@ def main():
             # with other template variables.
             "tpp_epoch_date": datetime.date(2009, 1, 1),
             "run_date": get_run_date(),
-            "from_date": {
-                "plot_from_2020": datetime.date(2020, 2, 1),
-                "plot_from_2016": datetime.date(2016, 1, 1),
-            },
+            "plot_titles": get_plot_titles(),
             "plots": group_plots(),
         }
     )
@@ -85,6 +82,11 @@ def get_metadata():
     for plot_group in ["plot_from_last_30_days", "plot_from_2020", "plot_from_2016"]:
         path = OUTPUT_DIR / plot_group / "metadata.json"
         yield json.loads(path.read_text())
+
+
+def get_plot_titles():
+    for metadata in get_metadata():
+        yield metadata["plot_title"]
 
 
 def group_plots():
