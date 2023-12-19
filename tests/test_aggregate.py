@@ -25,7 +25,7 @@ def test_aggregate_sum_by_day():
     series = make_event_counts(["table_1", "table_2"], ["2023-01-01", "2023-01-03"])
     series.loc[("table_1",)] = 7
     series.loc[("table_2",)] = 8
-    sum_by_day = aggregate.aggregate(series, "D", "sum")
+    sum_by_day = aggregate.aggregate(series, aggregate.sum_by_day_resampler)
     assert_frame_equal(
         sum_by_day,
         pandas.DataFrame(
@@ -42,7 +42,7 @@ def test_aggregate_mean_by_week():
     series = make_event_counts(["table_1"], ["2023-01-01", "2023-01-03", "2023-01-04"])
     series.loc[("table_1", "2023-01-03")] = 8
     series.loc[("table_1", "2023-01-04")] = 9
-    mean_by_week = aggregate.aggregate(series, "W", "mean")
+    mean_by_week = aggregate.aggregate(series, aggregate.mean_by_week_resampler)
     assert_frame_equal(
         mean_by_week,
         pandas.DataFrame(

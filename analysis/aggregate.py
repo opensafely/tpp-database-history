@@ -17,8 +17,8 @@ def main():
 
     d_out = OUTPUT_DIR / "aggregate"
     utils.makedirs(d_out)
-    aggregate(event_counts, "D", "sum").to_csv(d_out / "sum_by_day.csv")
-    aggregate(event_counts, "W", "mean").to_csv(d_out / "mean_by_week.csv")
+    aggregate(event_counts, sum_by_day_resampler).to_csv(d_out / "sum_by_day.csv")
+    aggregate(event_counts, mean_by_week_resampler).to_csv(d_out / "mean_by_week.csv")
 
 
 def read(f_in):
@@ -49,15 +49,36 @@ def read(f_in):
     return event_counts
 
 
-def aggregate(event_counts, offset, func):
+def aggregate(event_counts, resampler):
     group_by, resample_by = event_counts.index.names
     return (
-        event_counts.pipe(resample, offset, func)
+        event_counts.pipe(resampler, group_by, resample_by)
+        # Different aggregation functions behave differently when they are passed empty
+        # groups. For example, "sum" (`numpy.sum`) returns zeros; "mean" (`numpy.mean`)
+        # returns the missing value marker. We're resampling an irregular time series,
+        # so it's reasonable to replace the missing value marker with zeros.
+        .fillna(0)
         .round()  # to nearest integer
         .astype(int)
         .pipe(redact_le, SUPPRESSION_THRESHOLD)
         .pipe(round_to_nearest, ROUNDING_MULTIPLE)
         .unstack(level=group_by)
+    )
+
+
+def sum_by_day_resampler(event_counts, group_by, resample_by):
+    return (
+        event_counts.groupby(group_by)
+        .resample(level=resample_by, rule="D", label="left")
+        .sum()
+    )
+
+
+def mean_by_week_resampler(event_counts, group_by, resample_by):
+    return (
+        event_counts.groupby(group_by)
+        .resample(level=resample_by, rule="W", label="left")
+        .mean()
     )
 
 
@@ -73,31 +94,6 @@ def round_to_nearest(series, multiple):
         return int(multiple * round(value / multiple, 0))
 
     return series.apply(rounder)
-
-
-def resample(event_counts, offset, func):
-    """Resamples an irregular time series to a fixed frequency time series.
-
-    Args:
-        event_counts: An irregular time series.
-        offset: The unit to which event_counts is resampled [1].
-        func: The aggregation function [2].
-
-    [1]: https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
-    [2]: http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.core.resample.Resampler.aggregate.html#pandas.core.resample.Resampler.aggregate
-    """
-    group_by, resample_by = event_counts.index.names
-    return (
-        event_counts.groupby(level=group_by)
-        .resample(level=resample_by, rule=offset, label="left")
-        .aggregate(func)
-        # Different aggregation functions behave differently when they are passed empty
-        # groups. For example, "sum" (`numpy.sum`) returns zeros; "mean" (`numpy.mean`)
-        # returns the missing value marker. We're resampling an irregular time series,
-        # so it's reasonable to replace the missing value marker with zeros.
-        .fillna(0)
-        .sort_index()
-    )
 
 
 if __name__ == "__main__":
