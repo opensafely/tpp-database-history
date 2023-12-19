@@ -67,19 +67,11 @@ def aggregate(event_counts, resampler):
 
 
 def sum_by_day_resampler(event_counts, group_by, resample_by):
-    return (
-        event_counts.groupby(group_by)
-        .resample(level=resample_by, rule="D", label="left")
-        .sum()
-    )
+    return event_counts.groupby(group_by).resample(level=resample_by, rule="D").sum()
 
 
 def mean_by_week_resampler(event_counts, group_by, resample_by):
-    return (
-        event_counts.groupby(group_by)
-        .resample(level=resample_by, rule="W", label="left")
-        .mean()
-    )
+    return event_counts.groupby(group_by).resample(level=resample_by, rule="W").mean()
 
 
 def redact_le(series, threshold):

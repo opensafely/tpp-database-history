@@ -47,7 +47,7 @@ def test_aggregate_mean_by_week():
         mean_by_week,
         pandas.DataFrame(
             [(0,), (10,)],  # rows
-            index=pandas.DatetimeIndex(["2022-12-25", "2023-01-01"], name="event_date"),
+            index=pandas.DatetimeIndex(["2023-01-01", "2023-01-08"], name="event_date"),
             columns=pandas.Index(["table_1"], name="table_name"),
         ),
     )
