@@ -71,7 +71,18 @@ def sum_by_day_resampler(event_counts, group_by, resample_by):
 
 
 def mean_by_week_resampler(event_counts, group_by, resample_by):
-    return event_counts.groupby(group_by).resample(level=resample_by, rule="W").mean()
+    # Group event counts into weeks that run from Sunday to Saturday...
+    series = (
+        event_counts.groupby(group_by)
+        .resample(level=resample_by, rule="W", closed="left", label="left")
+        .mean()
+    )
+
+    # ...labelled by Wednesday.
+    frame = series.reset_index()
+    frame[resample_by] = frame[resample_by] + pandas.tseries.offsets.DateOffset(3)
+
+    return frame.set_index([group_by, resample_by]).loc[:, series.name]
 
 
 def redact_le(series, threshold):
