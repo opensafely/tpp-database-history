@@ -1,5 +1,6 @@
 """Plot aggregated event counts.
 """
+
 import collections
 import json
 import pathlib
