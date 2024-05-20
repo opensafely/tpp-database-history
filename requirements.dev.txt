@@ -165,9 +165,9 @@ nodeenv==1.8.0 \
     --hash=sha256:d51e0c37e64fbf47d017feac3145cdbb58836d7eee8c6f6d3b6880c5456227d2 \
     --hash=sha256:df865724bb3c3adc86b3876fa209771517b0cfe596beff01a92700e0e8be4cec
     # via pre-commit
-opensafely==1.46.0 \
-    --hash=sha256:03fbd9d4844f0b5c150b217c5e2d5f52fc6b25e356a547253100fc10d0258ec4 \
-    --hash=sha256:3df710ab49be04275f3cbce0d5248672d0f327b49b39aea7728ba2688f12bfc1
+opensafely==1.47.0 \
+    --hash=sha256:2d4321525f76d0b5487cc85bde7da796d31ecc42aef61f6938aa6ec10bc37214 \
+    --hash=sha256:a707e01edf0b1696b43c8cb90a1a7e892b8e3f99d9ddbad8f211a71a6e008445
     # via -r requirements.dev.in
 packaging==23.2 \
     --hash=sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5 \
