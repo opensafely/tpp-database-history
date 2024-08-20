@@ -118,7 +118,7 @@ check: black ruff sqlfluff
 # fix formatting and import sort ordering
 fix: devenv
     $BIN/black .
-    $BIN/ruff --fix .
+    $BIN/ruff format .
     $BIN/sqlfluff fix .
 
 
