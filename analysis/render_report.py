@@ -3,6 +3,7 @@
 For more information about Jinja, see:
 <https://jinja.palletsprojects.com/en/2.11.x/>
 """
+
 import base64
 import collections
 import datetime
