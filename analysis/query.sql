@@ -44,6 +44,19 @@ GROUP BY Admission_Date
 UNION ALL
 
 SELECT
+    'APCS_ARCHIVED' AS table_name,
+    Admission_Date AS event_date,
+    COUNT(*) AS event_count
+FROM APCS_ARCHIVED
+WHERE
+    Admission_Date >= @from_date
+    AND Admission_Date <= @to_date
+    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+GROUP BY Admission_Date
+
+UNION ALL
+
+SELECT
     'CPNS' AS table_name,
     DateOfDeath AS event_date,
     COUNT(*) AS event_count
@@ -70,10 +83,36 @@ GROUP BY Arrival_Date
 UNION ALL
 
 SELECT
+    'EC_ARCHIVED' AS table_name,
+    Arrival_Date AS event_date,
+    COUNT(*) AS event_count
+FROM EC_ARCHIVED
+WHERE
+    Arrival_Date >= @from_date
+    AND Arrival_Date <= @to_date
+    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+GROUP BY Arrival_Date
+
+UNION ALL
+
+SELECT
     'OPA' AS table_name,
     Appointment_Date AS event_date,
     COUNT(*) AS event_count
 FROM OPA
+WHERE
+    Appointment_Date >= @from_date
+    AND Appointment_Date <= @to_date
+    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+GROUP BY Appointment_Date
+
+UNION ALL
+
+SELECT
+    'OPA_ARCHIVED' AS table_name,
+    Appointment_Date AS event_date,
+    COUNT(*) AS event_count
+FROM OPA_ARCHIVED
 WHERE
     Appointment_Date >= @from_date
     AND Appointment_Date <= @to_date
