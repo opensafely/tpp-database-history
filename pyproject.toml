@@ -20,4 +20,4 @@ skip_glob = [".direnv", "venv", ".venv"]
 
 [tool.sqlfluff.core]
 dialect = "tsql"
-exclude_rules = "CP02"
+exclude_rules = ["CP02", "RF02"]
