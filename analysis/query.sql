@@ -12,7 +12,7 @@ FROM CodedEvent
 WHERE
     CONVERT(DATE, ConsultationDate) >= @from_date
     AND CONVERT(DATE, ConsultationDate) <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY CONVERT(DATE, ConsultationDate)
 
 UNION ALL
@@ -25,7 +25,7 @@ FROM Appointment
 WHERE
     CONVERT(DATE, SeenDate) >= @from_date
     AND CONVERT(DATE, SeenDate) <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY CONVERT(DATE, SeenDate)
 
 UNION ALL
@@ -38,7 +38,20 @@ FROM APCS
 WHERE
     Admission_Date >= @from_date
     AND Admission_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
+GROUP BY Admission_Date
+
+UNION ALL
+
+SELECT
+    'APCS_ARCHIVED' AS table_name,
+    Admission_Date AS event_date,
+    COUNT(*) AS event_count
+FROM APCS_ARCHIVED
+WHERE
+    Admission_Date >= @from_date
+    AND Admission_Date <= @to_date
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Admission_Date
 
 UNION ALL
@@ -51,7 +64,7 @@ FROM CPNS
 WHERE
     DateOfDeath >= @from_date
     AND DateOfDeath <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY DateOfDeath
 
 UNION ALL
@@ -64,7 +77,20 @@ FROM EC
 WHERE
     Arrival_Date >= @from_date
     AND Arrival_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
+GROUP BY Arrival_Date
+
+UNION ALL
+
+SELECT
+    'EC_ARCHIVED' AS table_name,
+    Arrival_Date AS event_date,
+    COUNT(*) AS event_count
+FROM EC_ARCHIVED
+WHERE
+    Arrival_Date >= @from_date
+    AND Arrival_Date <= @to_date
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Arrival_Date
 
 UNION ALL
@@ -77,7 +103,20 @@ FROM OPA
 WHERE
     Appointment_Date >= @from_date
     AND Appointment_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
+GROUP BY Appointment_Date
+
+UNION ALL
+
+SELECT
+    'OPA_ARCHIVED' AS table_name,
+    Appointment_Date AS event_date,
+    COUNT(*) AS event_count
+FROM OPA_ARCHIVED
+WHERE
+    Appointment_Date >= @from_date
+    AND Appointment_Date <= @to_date
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Appointment_Date
 
 UNION ALL
@@ -90,7 +129,7 @@ FROM ICNARC
 WHERE
     CONVERT(DATE, IcuAdmissionDateTime) >= @from_date
     AND CONVERT(DATE, IcuAdmissionDateTime) <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY CONVERT(DATE, IcuAdmissionDateTime)
 
 UNION ALL
@@ -103,7 +142,7 @@ FROM ONS_Deaths
 WHERE
     dod >= @from_date
     AND dod <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY dod
 
 UNION ALL
@@ -116,7 +155,7 @@ FROM SGSS_Positive
 WHERE
     Earliest_Specimen_Date >= @from_date
     AND Earliest_Specimen_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Earliest_Specimen_Date
 
 UNION ALL
@@ -129,7 +168,7 @@ FROM SGSS_Negative
 WHERE
     Earliest_Specimen_Date >= @from_date
     AND Earliest_Specimen_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Earliest_Specimen_Date
 
 UNION ALL
@@ -142,7 +181,7 @@ FROM SGSS_AllTests_Positive
 WHERE
     Specimen_Date >= @from_date
     AND Specimen_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Specimen_Date
 
 UNION ALL
@@ -155,7 +194,7 @@ FROM SGSS_AllTests_Negative
 WHERE
     Specimen_Date >= @from_date
     AND Specimen_Date <= @to_date
-    AND Patient_ID IN (SELECT Patient_ID FROM AllowedPatientsWithTypeOneDissent)
+    AND Patient_ID NOT IN (SELECT Patient_ID FROM PatientsWithTypeOneDissent)
 GROUP BY Specimen_Date
 
 ORDER BY table_name, event_date, event_count
