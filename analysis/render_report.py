@@ -13,7 +13,7 @@ import pathlib
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from analysis import ANALYSIS_DIR, OUTPUT_DIR, utils
+from analysis import ANALYSIS_DIR, OUTPUT_DIR, RELEASE_DIR, utils
 
 ENVIRONMENT = Environment(
     loader=FileSystemLoader(ANALYSIS_DIR),
@@ -22,7 +22,7 @@ ENVIRONMENT = Environment(
 
 
 def main():
-    f_out = OUTPUT_DIR / "render_report" / "report.html"
+    f_out = RELEASE_DIR / "render_report" / "report.html"
     utils.makedirs(f_out.parent)
     rendered_report = render_report(
         {

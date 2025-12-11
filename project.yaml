@@ -22,7 +22,7 @@ actions:
     run: python:latest python -m analysis.aggregate
     outputs:
       moderately_sensitive:
-        aggregates: output/aggregate/*_by_*.csv
+        aggregates: output/files_for_release/aggregate/*_by_*.csv
 
   plot_from_2016:
     needs: [query, aggregate]
@@ -62,4 +62,4 @@ actions:
     run: python:latest python -m analysis.render_report
     outputs:
       moderately_sensitive:
-        report: output/render_report/report.html
+        report: output/files_for_release/render_report/report.html

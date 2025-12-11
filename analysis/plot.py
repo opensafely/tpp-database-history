@@ -11,7 +11,7 @@ import click
 import pandas
 from matplotlib import pyplot
 
-from analysis import OUTPUT_DIR, utils
+from analysis import RELEASE_DIR, utils
 
 
 class ClickTimestamp(click.ParamType):
@@ -50,7 +50,7 @@ def main(from_date, from_offset, d_out):
     # why), so this ensures that at least one from_* option is set.
     assert (from_date is not None) or (from_offset is not None)
 
-    d_in = OUTPUT_DIR / "aggregate"
+    d_in = RELEASE_DIR / "aggregate"
     by_day = read(d_in / "sum_by_day.csv")
     by_week = read(d_in / "mean_by_week.csv")
 
