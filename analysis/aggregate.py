@@ -6,7 +6,7 @@ https://docs.opensafely.org/releasing-files/
 
 import pandas
 
-from analysis import OUTPUT_DIR, utils
+from analysis import OUTPUT_DIR, RELEASE_DIR, utils
 
 SUPPRESSION_THRESHOLD = 7
 ROUNDING_MULTIPLE = 5
@@ -16,7 +16,7 @@ def main():
     d_in = OUTPUT_DIR / "query"
     event_counts = read(d_in / "rows.csv.gz")
 
-    d_out = OUTPUT_DIR / "aggregate"
+    d_out = RELEASE_DIR / "aggregate"
     utils.makedirs(d_out)
     aggregate(event_counts, sum_by_day_resampler).to_csv(d_out / "sum_by_day.csv")
     aggregate(event_counts, mean_by_week_resampler).to_csv(d_out / "mean_by_week.csv")
