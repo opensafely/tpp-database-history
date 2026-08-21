@@ -1,12 +1,9 @@
-version: "3.0"
-
-expectations:
-  population_size: 1000
+version: "5.0"
 
 actions:
   query:
     run: >
-      sqlrunner:latest
+      sqlrunner:v1
         --dummy-data-file analysis/dummy_rows.csv.gz
         --output output/query/rows.csv.gz
         --log-file output/query/log.json
@@ -19,7 +16,7 @@ actions:
 
   aggregate:
     needs: [query]
-    run: python:latest python -m analysis.aggregate
+    run: python:v2 python -m analysis.aggregate
     outputs:
       moderately_sensitive:
         aggregates: output/files_for_release/aggregate/*_by_*.csv
@@ -27,7 +24,7 @@ actions:
   plot_from_2016:
     needs: [query, aggregate]
     run: >
-      python:latest python -m analysis.plot
+      python:v2 python -m analysis.plot
         --from-date 2016-01-01
         --output output/plot_from_2016
     outputs:
@@ -38,7 +35,7 @@ actions:
   plot_from_2020:
     needs: [query, aggregate]
     run: >
-      python:latest python -m analysis.plot
+      python:v2 python -m analysis.plot
         --from-date 2020-02-01
         --output output/plot_from_2020
     outputs:
@@ -49,7 +46,7 @@ actions:
   plot_from_last_30_days:
     needs: [query, aggregate]
     run: >
-      python:latest python -m analysis.plot
+      python:v2 python -m analysis.plot
         --from-offset 30
         --output output/plot_from_last_30_days
     outputs:
@@ -59,7 +56,7 @@ actions:
 
   render_report:
     needs: [query, plot_from_2016, plot_from_2020, plot_from_last_30_days]
-    run: python:latest python -m analysis.render_report
+    run: python:v2 python -m analysis.render_report
     outputs:
       moderately_sensitive:
         report: output/files_for_release/render_report/report.html
