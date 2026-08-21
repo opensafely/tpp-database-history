@@ -126,12 +126,10 @@ def plot(by_day, by_week, plot_title):
         fig.text(
             0,
             0,
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 Event counts are based on raw data and should not be used for clinical or epidemiological inference.
                 Suppression and rounding have been applied to event counts.
-                """
-            ),
+                """),
         )
 
         ax.plot(by_day.index, by_day[col], linewidth=1, label="Day")
