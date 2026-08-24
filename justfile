@@ -3,7 +3,7 @@ export VIRTUAL_ENV  := env_var_or_default("VIRTUAL_ENV", ".venv")
 export BIN := VIRTUAL_ENV + if os_family() == "unix" { "/bin" } else { "/Scripts" }
 export PIP := BIN + if os_family() == "unix" { "/python -m pip" } else { "/python.exe -m pip" }
 
-export DEFAULT_PYTHON := if os_family() == "unix" { "python3.8" } else { "python" }
+export DEFAULT_PYTHON := if os_family() == "unix" { "python3.10" } else { "python" }
 
 
 # list available commands
@@ -91,7 +91,7 @@ upgrade env package="": virtualenv
     #!/usr/bin/env bash
     set -euo pipefail
 
-    opts="--upgrade"
+    opts="--upgrade --strip-extras --pip-args uploaded-prior-to=P7D"
     test -z "{{ package }}" || opts="--upgrade-package {{ package }}"
     FORCE=true "{{ just_executable() }}" requirements-{{ env }} $opts
 
