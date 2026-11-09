@@ -532,9 +532,9 @@ ruff==0.16.4 \
     --hash=sha256:f2d812e482f5a7e02eee26cd73d2a37ebbdf47d795ea63ba1b89110ae93e9fb3 \
     --hash=sha256:fbd85d2875fdd67e833213a651f613bbf25303abf6aa822a5121f4531195678d
     # via -r requirements.dev.in
-sqlfluff==4.3.0 \
-    --hash=sha256:582e12af5101bd1c5bc120cb4a6942dadcfe5e5b1e01406f220dd08f5b3f31dd \
-    --hash=sha256:aa647b3721112f1aca581efe8eaa815a332ae214610a0946592f98a19ef1e8cb
+sqlfluff==4.5.0 \
+    --hash=sha256:0b0d5b2cca03e7d138b8d899249fed5fa54083e407bbd161449c0b30f901b7b8 \
+    --hash=sha256:471a9abcad8061e36b69f711a6d89393241e30f9d1e0869f79965c0ae2c889c7
     # via -r requirements.dev.in
 tblib==3.2.2 \
     --hash=sha256:26bdccf339bcce6a88b2b5432c988b266ebbe63a4e593f6b578b1d2e723d2b76 \
